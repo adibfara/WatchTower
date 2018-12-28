@@ -1,0 +1,27 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    apply from: rootProject.file('dependencies.gradle')
+    apply from: rootProject.file('artifactory-auth.gradle')
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath gradlePlugins.android
+        classpath gradlePlugins.kotlin
+        classpath gradlePlugins.kotlinAndroidExtensions
+        classpath gradlePlugins.jfrog
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

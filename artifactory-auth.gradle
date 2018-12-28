@@ -1,0 +1,12 @@
+ext.artifactoryUser = ''
+ext.artifactoryPassword = ''
+
+if (System.getenv('ARTIFACTORY_USERNAME') != null) {
+  artifactoryUser = System.getenv('ARTIFACTORY_USERNAME')
+  artifactoryPassword = System.getenv('ARTIFACTORY_PASSWORD')
+} else {
+  Properties properties = new Properties()
+  properties.load(project.rootProject.file('local.properties').newDataInputStream())
+  artifactoryUser = properties.getProperty('artifactoryUser')
+  artifactoryPassword = properties.getProperty('artifactoryPassword')
+}

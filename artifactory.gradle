@@ -1,0 +1,27 @@
+apply plugin: "com.jfrog.artifactory"
+apply plugin: 'maven-publish'
+apply from: rootProject.file('dependencies.gradle')
+
+def artifactoryUrl = "https://artifactory.docker.webdooz.com/artifactory"
+
+artifactory {
+  contextUrl = artifactoryUrl
+  //The base Artifactory URL if not overridden by the publisher/resolver
+  publish {
+    repository {
+      Properties prop = null
+      if (project.rootProject.file('local.properties').exists()) {
+        prop = new Properties()
+        prop.load(project.rootProject.file('local.properties').newDataInputStream())
+      }
+      repoKey = maven.version.endsWith('SNAPSHOT') ? 'tap30-snapshot' : 'tap30-release'
+      username = prop?.getProperty("artifactoryUser") ?: System.getenv('ARTIFACTORY_USERNAME')
+      password = prop?.getProperty("artifactoryPassword") ?: System.getenv('ARTIFACTORY_PASSWORD')
+    }
+
+    defaults {
+      publishArtifacts = true
+      publications('aar', 'jar')
+    }
+  }
+}
