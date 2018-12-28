@@ -9,7 +9,6 @@ import kotlinx.coroutines.*
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
-import java.lang.Exception
 
 class WatchtowerActivity : AppCompatActivity() {
 
@@ -18,6 +17,8 @@ class WatchtowerActivity : AppCompatActivity() {
             8085
         )
     }
+    val testJob = SupervisorJob()
+    val activityScope = CoroutineScope(Dispatchers.Main + testJob)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,33 +36,21 @@ class WatchtowerActivity : AppCompatActivity() {
             ).baseUrl("http://google.com/")
             .addConverterFactory(ScalarsConverterFactory.create())
             .build().create(TestAPI::class.java)
-        try {
-            GlobalScope.launch {
-                try {
-                    withContext(Dispatchers.IO) {
-                        try {
-                            while (true) {
-                                val call = retrofit.getExample().execute()
-                                Log.e("call", call.body() ?: " Empty response")
-                                delay(4000)
-                            }
-                        } catch (t: Throwable) {
-                            t.printStackTrace()
-                        }
-
+        activityScope.launch(Dispatchers.IO + testJob) {
+            withContext(Dispatchers.IO) {
+                while (true) {
+                    try {
+                        val call = retrofit.getExample().execute()
+                        Log.e("call", call.body() ?: " Empty response")
+                        delay(4000)
+                    } catch (t: Throwable) {
+                        t.printStackTrace()
                     }
-                } catch (t: Throwable) {
-                    t.printStackTrace()
-
                 }
-
-
             }
-        } catch (e: Throwable) {
 
-            e.printStackTrace()
+
         }
-
         eventReporter.start()
 
 
@@ -69,6 +58,7 @@ class WatchtowerActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        testJob.cancel()
         eventReporter.stop()
     }
 }
