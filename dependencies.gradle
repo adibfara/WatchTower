@@ -14,6 +14,7 @@ ext.versions = [
         jfrog     : '4.7.5',
         retrofit  : '2.5.0',
         okhttp    : '3.12.0',
+        ktor    : '1.1.1',
 
 
 ]
@@ -40,5 +41,8 @@ ext.libs = [
         retrofitScalars   : "com.squareup.retrofit2:converter-scalars:$versions.retrofit",
         okhttp     : "com.squareup.okhttp3:okhttp:$versions.okhttp",
         okhttpMock : "com.squareup.okhttp3:mockwebserver:$versions.okhttp",
+        ktor : "io.ktor:ktor-server-core:$versions.ktor",
+        ktorServer : "io.ktor:ktor-server-netty:$versions.ktor",
+        ktorWebSocket : "io.ktor:ktor-websockets:$versions.ktor",
 
 ]

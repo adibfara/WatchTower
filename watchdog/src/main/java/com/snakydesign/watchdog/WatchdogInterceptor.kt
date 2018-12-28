@@ -3,22 +3,6 @@ package com.snakydesign.watchdog
 /**
  * @author Adib Faramarzi (adibfara@gmail.com)
  */
-/*
- * Copyright (C) 2015 Square, Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 
 import okhttp3.*
 import okhttp3.internal.http.HttpHeaders
@@ -29,14 +13,10 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 /**
- * An OkHttp interceptor which logs request and response information. Can be applied as an
+ * An OkHttp interceptor which logs request and response information to a websocket client (by default). Can be applied as an
  * [application interceptor][OkHttpClient.interceptors] or as a [ ][OkHttpClient.networkInterceptors].
- *
- * The format of the logs created by
- * this class should not be considered stable and may change slightly between releases. If you need
- * a stable logging format, use your own interceptor.
  */
-class WatchdogInterceptor @JvmOverloads constructor(@Volatile private var level: LogLevel = LogLevel.FULL, private val eventReporter: RetrofitEventReporter = WebSocketEventReporter()) :
+class WatchdogInterceptor @JvmOverloads constructor(private val eventReporter: RetrofitEventReporter = WebSocketEventReporter(), @Volatile private var level: LogLevel = LogLevel.FULL) :
     Interceptor {
 
     @Volatile
@@ -53,7 +33,6 @@ class WatchdogInterceptor @JvmOverloads constructor(@Volatile private var level:
          */
         FULL
     }
-
 
     fun redactHeader(name: String) {
         val newHeadersToRedact = TreeSet(String.CASE_INSENSITIVE_ORDER)
