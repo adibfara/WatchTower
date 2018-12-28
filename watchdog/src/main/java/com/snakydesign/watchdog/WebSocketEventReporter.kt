@@ -1,5 +1,6 @@
 package com.snakydesign.watchdog
 
+import com.snakydesign.watchdog.html.MainHtml.mainHtml
 import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.http.ContentType
@@ -35,51 +36,7 @@ class WebSocketEventReporter(port: Int = 8293) : RetrofitEventReporter {
             routing {
                 get("/") {
                     call.respondText(
-                        """
-                        <!DOCTYPE html>
-<html>
-<body>
-
-<h1>This is heading 1</h1>
-<h2>This is heading 2</h2>
-<h3>This is heading 3</h3>
-<h4>This is heading 4</h4>
-<h5>This is heading 5</h5>
-<h6>This is heading 6</h6>
-
-<script>
-var somePackage = {};
-somePackage.connect = function()  {
-    var ws = new WebSocket('ws://'+document.location.host+'/ws');
-    ws.onopen = function() {
-        alert('ws connected');
-        somePackage.ws = ws;
-    };
-    ws.onerror = function() {
-        alert('ws error');
-    };
-    ws.onclose = function() {
-        alert('ws closed');
-    };
-    ws.onmessage = function(msgevent) {
-        alert(msgevent.data);
-    };
-};
-
-somePackage.send = function(msg) {
-    if (!this.ws) {
-        console.log('no connection');
-        return;
-    }
-    console.log('out:', msg)
-    this.ws.send(window.JSON.stringify(msg));
-};
-somePackage.connect()
-</script>
-</body>
-</html>
-
-                    """.trimIndent(), ContentType.Text.Html
+                        mainHtml, ContentType.Text.Html
                     )
                 }
                 webSocket("/ws") {
@@ -107,8 +64,8 @@ somePackage.connect()
 
     }
 
-    fun start() {
-        engine.start(wait = false)
+    fun start(wait: Boolean = false) {
+        engine.start(wait = wait)
     }
 
     fun stop() {

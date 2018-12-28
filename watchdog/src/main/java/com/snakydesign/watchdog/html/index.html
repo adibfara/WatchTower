@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Minimal Resume Template</title>
+    <link rel="stylesheet" type="text/css" href="main.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+<body>
+
+<div class="container">
+    <div class="hero">
+        <h1 class="name"><strong>Watchtower</strong></h1>
+    </div>
+</div>
+
+<div class="main container cards">
+
+    <div>
+        <div class="main-viewer">1</div>
+        <div class="main-requests">
+            <div class="card success">
+                <div class="url">
+                    <h3>GET</h3>
+                    <h2>http://uber.docker.webdooz.com/api/user/searchTest</h2>
+                </div>
+
+                <div class="meta">
+
+                    <div class="response">
+                      <span class="length">
+                          SUCCESS 400
+                        </span>
+                    </div>
+                    <div class="info">
+                        <span class="length">
+                            <strong>1.2</strong> Kilobytes
+                        </span>
+                        <span class="time">
+                            <strong>47</strong>ms
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="card failure">
+                <div class="url">
+                    <h3>GET</h3>
+                    <h2>http://uber.docker.webdooz.com/api/user/searchTest</h2>
+                </div>
+
+                <div class="meta">
+
+                    <div class="response">
+                        ERROR 500
+                    </div>
+                    <div class="info">
+                        <span class="length">
+                            <strong>1.2</strong> Kilobytes
+                        </span>
+                        <span class="time">
+                            <strong>47</strong>ms
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+
+
+<br/>
+
+
+<footer class="container">
+    <span style="font-size: 16px; margin-top: ">Created with ❤ by <a
+            href="https://github.com/adibfara">Adib Faramarzi</a></a></span>
+</footer>
+
+<script>
+${mainJs}
+
+</script>
+</body>
+</html>
