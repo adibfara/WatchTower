@@ -1,5 +1,8 @@
 package com.snakydesign.watchdog
 
+import com.snakydesign.watchdog.models.RequestData
+import com.snakydesign.watchdog.models.ResponseData
+
 /**
  * @author Adib Faramarzi (adibfara@gmail.com)
  */

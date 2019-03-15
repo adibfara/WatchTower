@@ -1,1 +1,1 @@
-include ':app', ':watchdog', ':JavaApp', ':java'
+include  ':watchdog', ':JavaApp', ':java'

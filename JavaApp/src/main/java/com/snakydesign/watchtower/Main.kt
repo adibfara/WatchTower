@@ -2,24 +2,26 @@ package com.snakydesign.watchtower
 
 import com.snakydesign.watchdog.WatchdogInterceptor
 import com.snakydesign.watchtower.java.JavaWebsocketLogger
+import jdk.nashorn.internal.codegen.CompilerConstants
 import kotlinx.coroutines.*
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.GET
+import java.io.File
 
-object Main {
+val eventReporter by lazy {
 
-    val eventReporter by lazy {
-        JavaWebsocketLogger(
-            8085
-        )
-    }
-    val testJob = SupervisorJob()
-    val javaMainScope = CoroutineScope(Dispatchers.Main + testJob)
-    @JvmStatic
-    fun main(args: Array<String>) = runBlocking {
+    JavaWebsocketLogger(
+        8085
+    )
+}
+val testJob = SupervisorJob()
+val javaMainScope = CoroutineScope(Dispatchers.Main + testJob)
+fun main() {
+
+    runBlocking<Unit> {
 
         val interceptor = WatchdogInterceptor(
             eventReporter

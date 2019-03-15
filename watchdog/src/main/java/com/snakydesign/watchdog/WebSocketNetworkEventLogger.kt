@@ -1,5 +1,7 @@
 package com.snakydesign.watchdog
 
+import com.snakydesign.watchdog.models.RequestData
+import com.snakydesign.watchdog.models.ResponseData
 import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.http.ContentType
@@ -18,6 +20,7 @@ import io.ktor.websocket.WebSockets
 import io.ktor.websocket.webSocket
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
 import java.io.File
 import java.util.concurrent.TimeUnit
 
@@ -75,10 +78,6 @@ abstract class WebSocketNetworkEventLogger constructor(private val port: Int) : 
                             is Frame.Text -> {
                                 val text = frame.readText()
                                 println(text)
-                                outgoing.send(Frame.Text("YOU SAID: $text"))
-                                if (text.equals("bye", ignoreCase = true)) {
-                                    close(CloseReason(CloseReason.Codes.NORMAL, "Client said BYE"))
-                                }
                             }
                         }
                     }
@@ -101,7 +100,7 @@ abstract class WebSocketNetworkEventLogger constructor(private val port: Int) : 
 
     override fun logRequest(requestSent: RequestData, logLevel: WatchdogInterceptor.LogLevel) {
         checkIfEngineStarted()
-        sendMessage(requestSent.toString())
+        //sendMessage(requestSent.toString())
 
     }
 
@@ -109,12 +108,20 @@ abstract class WebSocketNetworkEventLogger constructor(private val port: Int) : 
         responseReceived: ResponseData, logLevel: WatchdogInterceptor.LogLevel
     ) {
         checkIfEngineStarted()
-        sendMessage(responseReceived.toString())
+        sendMessage(responseReceived.toJson())
     }
 
     fun sendMessage(message: String) {
         GlobalScope.launch {
             outgoingMessageHandler?.invoke(message)
         }
+    }
+
+    private fun RequestData.toJson(): String {
+        return Json.stringify(RequestData.serializer(), this)
+    }
+
+    private fun ResponseData.toJson(): String {
+        return Json.stringify(ResponseData.serializer(), this)
     }
 }

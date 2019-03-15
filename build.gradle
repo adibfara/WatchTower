@@ -10,6 +10,7 @@ buildscript {
     dependencies {
         classpath gradlePlugins.android
         classpath gradlePlugins.kotlin
+        classpath gradlePlugins.kotlinSerialization
         classpath gradlePlugins.kotlinAndroidExtensions
         classpath gradlePlugins.jfrog
     }
@@ -19,6 +20,7 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven { url "https://kotlin.bintray.com/kotlinx" }
     }
 }
 

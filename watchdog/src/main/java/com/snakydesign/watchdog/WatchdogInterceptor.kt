@@ -4,12 +4,14 @@ package com.snakydesign.watchdog
  * @author Adib Faramarzi (adibfara@gmail.com)
  */
 
+import com.snakydesign.watchdog.models.*
 import okhttp3.*
 import okhttp3.internal.http.HttpHeaders
 import okio.Buffer
 import java.io.IOException
 import java.nio.charset.Charset
 import java.util.*
+import java.util.Collections.emptySet
 import java.util.concurrent.TimeUnit
 
 /**
@@ -84,7 +86,7 @@ class WatchdogInterceptor @JvmOverloads constructor(private vararg val networkEv
             }
             ContentBody(requestBody.contentLength(), body, requestBody.contentLength())
         } else {
-            EmptyBody
+            EmptyBody()
         }
 
         val headers = request.headers()
@@ -127,7 +129,7 @@ class WatchdogInterceptor @JvmOverloads constructor(private vararg val networkEv
 
 
         } else {
-            EmptyBody
+            EmptyBody()
         }
 
 

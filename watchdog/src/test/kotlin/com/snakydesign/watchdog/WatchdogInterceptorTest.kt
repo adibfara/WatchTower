@@ -1,8 +1,14 @@
 package com.snakydesign.watchdog
 
+import com.snakydesign.watchdog.models.ContentBody
+import com.snakydesign.watchdog.models.EmptyBody
+import com.snakydesign.watchdog.models.RequestData
+import com.snakydesign.watchdog.models.ResponseData
 import io.mockk.clearMocks
+import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
+import kotlinx.coroutines.NonCancellable.start
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockResponse
@@ -13,6 +19,7 @@ import org.junit.Before
 import org.junit.Test
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
+import java.io.File
 
 
 /**
@@ -21,8 +28,17 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 class WatchdogInterceptorTest {
     lateinit var watchdogInterceptorTest: TestWatchdogAPI
     lateinit var mockWebServer: MockWebServer
-    val mockkEventLogger: NetworkEventAgent = spyk(WebSocketNetworkEventLogger())
-    val interceptor = WatchdogInterceptor(networkEventLoggers = mockkEventLogger)
+
+    class TestEventLogger : NetworkEventLogger {
+        override fun logRequest(requestSent: RequestData, logLevel: WatchdogInterceptor.LogLevel) {
+        }
+
+        override fun logResponse(responseReceived: ResponseData, logLevel: WatchdogInterceptor.LogLevel) {
+        }
+    }
+
+    val mockkEventLogger = spyk(TestEventLogger())
+    val interceptor = WatchdogInterceptor(mockkEventLogger)
 
     lateinit var url: HttpUrl
     @Before
@@ -84,10 +100,10 @@ class WatchdogInterceptorTest {
         response.execute()
         verify {
             mockkEventLogger.logRequest(withArg {
-                assert(it.headers["testableRequestHeader"] == listOf(requestHeader))
+                assert(it.headers.first { it.key == "testableRequestHeader" }.value == requestHeader)
             }, any())
             mockkEventLogger.logResponse(withArg {
-                assert(it.headers["testableResponseHeader"] == listOf(responseHeader))
+                assert(it.headers.first { it.key == "testableResponseHeader" }.value == responseHeader)
 
             }, any())
         }
@@ -112,10 +128,10 @@ class WatchdogInterceptorTest {
         response.execute()
         verify {
             mockkEventLogger.logRequest(withArg {
-                assert(!it.headers.containsKey("testableRequestHeader"))
+                assert(!it.headers.any { it.key == "testableRequestHeader" })
             }, any())
             mockkEventLogger.logResponse(withArg {
-                assert(!it.headers.containsKey("testableResponseHeader"))
+                assert(!it.headers.any { it.key == "testableResponseHeader" })
 
             }, any())
         }
