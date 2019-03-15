@@ -9,7 +9,7 @@ ext.versions = [
         androidSdk: '4.1.1.4',
         support   : '27.1.0',
         junit     : '4.12',
-        android   : '3.2.1',
+        android   : '3.3.0',
         mockk     : '1.8.13.kotlin13',
         jfrog     : '4.7.5',
         retrofit  : '2.5.0',

@@ -3,7 +3,7 @@ apply plugin: 'kotlin'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(':java')
+    api project(':watchdog')
 
     implementation libs.kotlin
     implementation libs.retrofit
@@ -14,6 +14,10 @@ dependencies {
     testImplementation libs.junit
     testImplementation libs.mockk
 }
-
+sourceSets {
+    main.resources {
+        srcDir 'src/main/resources'
+    }
+}
 sourceCompatibility = "7"
 targetCompatibility = "7"

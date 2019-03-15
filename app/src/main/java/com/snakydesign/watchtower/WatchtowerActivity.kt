@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import com.snakydesign.watchdog.WatchdogInterceptor
-import com.snakydesign.watchdog.WebSocketEventReporter
+import com.snakydesign.watchtower.java.JavaWebsocketLogger
 import kotlinx.coroutines.*
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -13,7 +13,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 class WatchtowerActivity : AppCompatActivity() {
 
     val eventReporter by lazy {
-        WebSocketEventReporter(
+        JavaWebsocketLogger(
             8085
         )
     }

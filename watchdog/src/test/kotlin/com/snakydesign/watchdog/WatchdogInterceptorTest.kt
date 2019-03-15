@@ -21,8 +21,8 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 class WatchdogInterceptorTest {
     lateinit var watchdogInterceptorTest: TestWatchdogAPI
     lateinit var mockWebServer: MockWebServer
-    val mockkEventLogger: RetrofitEventReporter = spyk(WebSocketEventReporter())
-    val interceptor = WatchdogInterceptor(eventReporter = mockkEventLogger)
+    val mockkEventLogger: NetworkEventAgent = spyk(WebSocketNetworkEventLogger())
+    val interceptor = WatchdogInterceptor(networkEventLoggers = mockkEventLogger)
 
     lateinit var url: HttpUrl
     @Before

@@ -1,24 +1,23 @@
-package com.snakydesign.watchtower.javaapp
+package com.snakydesign.watchtower
 
 import com.snakydesign.watchdog.WatchdogInterceptor
-import com.snakydesign.watchdog.WebSocketEventReporter
+import com.snakydesign.watchtower.java.JavaWebsocketLogger
 import kotlinx.coroutines.*
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.GET
-import sun.rmi.runtime.Log
 
 object Main {
 
     val eventReporter by lazy {
-        WebSocketEventReporter(
+        JavaWebsocketLogger(
             8085
         )
     }
     val testJob = SupervisorJob()
-    val activityScope = CoroutineScope(Dispatchers.Main + testJob)
+    val javaMainScope = CoroutineScope(Dispatchers.Main + testJob)
     @JvmStatic
     fun main(args: Array<String>) = runBlocking {
 
@@ -33,13 +32,15 @@ object Main {
             ).baseUrl("http://google.com/")
             .addConverterFactory(ScalarsConverterFactory.create())
             .build().create(TestAPI::class.java)
-        activityScope.launch(Dispatchers.IO + testJob) {
+        eventReporter.start(false)
+
+        javaMainScope.launch(Dispatchers.IO + testJob) {
             withContext(Dispatchers.IO) {
                 while (true) {
                     try {
                         val call = retrofit.getExample().execute()
                         println(call.body() ?: " Empty response")
-                        delay(60000)
+                        delay(6000)
                     } catch (t: Throwable) {
                         t.printStackTrace()
                     }
@@ -48,7 +49,9 @@ object Main {
 
 
         }
-        eventReporter.start(true)
+
+
+        Unit
     }
 }
 

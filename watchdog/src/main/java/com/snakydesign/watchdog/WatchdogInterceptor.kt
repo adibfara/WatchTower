@@ -16,13 +16,16 @@ import java.util.concurrent.TimeUnit
  * An OkHttp interceptor which logs request and response information to a websocket client (by default). Can be applied as an
  * [application interceptor][OkHttpClient.interceptors] or as a [ ][OkHttpClient.networkInterceptors].
  */
-class WatchdogInterceptor @JvmOverloads constructor(private val eventReporter: RetrofitEventReporter = WebSocketEventReporter(), @Volatile private var level: LogLevel = LogLevel.FULL) :
+class WatchdogInterceptor @JvmOverloads constructor(private vararg val networkEventLoggers: NetworkEventLogger, @Volatile private var level: LogLevel = LogLevel.FULL) :
     Interceptor {
 
     @Volatile
     private var headersToRedact = emptySet<String>()
 
     enum class LogLevel {
+        /**
+         * Does not log anything.
+         */
         NONE,
         /**
          * Logs request and response lines and their respective headers.
@@ -47,7 +50,7 @@ class WatchdogInterceptor @JvmOverloads constructor(private val eventReporter: R
         val request = chain.request()
         val startNs = System.nanoTime()
         val requestData = request.asData(startNs, chain.connection())
-        eventReporter.logRequest(requestData, level)
+        networkEventLoggers.forEach { it.logRequest(requestData, level) }
         val response: Response
         try {
             response = chain.proceed(request)
@@ -55,7 +58,7 @@ class WatchdogInterceptor @JvmOverloads constructor(private val eventReporter: R
             throw e
         }
         val responseData = response.asData(requestData)
-        eventReporter.logResponse(responseData, level)
+        networkEventLoggers.forEach { it.logResponse(responseData, level) }
 
         return response
     }
@@ -128,7 +131,14 @@ class WatchdogInterceptor @JvmOverloads constructor(private val eventReporter: R
         }
 
 
-        return ResponseData(requestData, responseDataHeaders, responseBody, tookTime)
+        return ResponseData(
+            requestData,
+            responseDataHeaders,
+            responseBody,
+            tookTime,
+            response.code(),
+            response.body()?.contentLength() ?: 0L
+        )
     }
 
     private fun Headers.bodyHasUnknownEncoding(): Boolean {
@@ -138,13 +148,19 @@ class WatchdogInterceptor @JvmOverloads constructor(private val eventReporter: R
                 && !contentEncoding.equals("gzip", ignoreCase = true))
     }
 
-    private fun Headers.asDataHeaders(headersToRedact: Set<String>): Map<String, List<String>> {
-        return names().filterNot { headersToRedact.contains(it) }.map { name ->
-            Pair<String, List<String>>(
-                name,
-                values(name)
-            )
-        }.toMap()
+    private fun Headers.asDataHeaders(headersToRedact: Set<String>): List<HeaderData> {
+        val finalList = mutableListOf<HeaderData>()
+        names().filterNot { headersToRedact.contains(it) }.forEach { name ->
+            values(name).forEach {
+                finalList.add(
+                    HeaderData(
+                        name, it
+                    )
+                )
+            }
+
+        }
+        return finalList
     }
 
     companion object {

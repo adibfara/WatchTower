@@ -31,6 +31,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':watchdog')
+    implementation project(':java')
     implementation libs.kotlin
     implementation libs.retrofit
     implementation libs.retrofitScalars

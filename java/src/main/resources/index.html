@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Minimal Resume Template</title>
+    <title>Watchtower</title>
     <link rel="stylesheet" type="text/css" href="main.css">
+    <link rel="stylesheet"
+          href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/styles/default.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/highlight.min.js"></script>
 </head>
 <body>
 
@@ -16,9 +20,20 @@
 <div class="main container cards">
 
     <div>
-        <div class="main-viewer">1</div>
-        <div class="main-requests">
-            <div class="card success">
+        <div class="main-viewer">
+            Request:
+            <div id="request_body">
+
+            </div>
+            Response:
+            <div id="response_body">
+
+
+            </div>
+        </div>
+
+        <div class="main-requests" id="requests_container">
+            <div class="card success animatable">
                 <div class="url">
                     <h3>GET</h3>
                     <h2>http://uber.docker.webdooz.com/api/user/searchTest</h2>
@@ -41,7 +56,7 @@
                     </div>
                 </div>
             </div>
-            <div class="card failure">
+            <div class="card failure animatable">
                 <div class="url">
                     <h3>GET</h3>
                     <h2>http://uber.docker.webdooz.com/api/user/searchTest</h2>
@@ -74,12 +89,18 @@
 
 
 <footer class="container">
-    <span style="font-size: 16px; margin-top: ">Created with ❤ by <a
+    <span style="font-size: 16px; margin-top: ">Created with <b style="color:red">&#x2665;</b> by <a
             href="https://github.com/adibfara">Adib Faramarzi</a></a></span>
 </footer>
 
 <script>
-${mainJs}
+hljs.fixMarkup(true)
+hljs.initHighlightingOnLoad();
+</script>
+<script src="jquery.min.js">
+
+</script>
+<script src="main.js">
 
 </script>
 </body>
