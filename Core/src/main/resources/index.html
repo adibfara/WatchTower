@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Watchtower</title>
+    <link href="main.css" rel="stylesheet" type="text/css">
+
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/ocean.min.css" rel="stylesheet">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/highlight.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <div class="hero">
+        <h1 class="name"><strong>Watchtower</strong></h1>
+    </div>
+</div>
+
+<div class="main container cards">
+
+    <div>
+        <div class="main-viewer">
+            <div class="wrapper data-container fade-animatable">
+                <ul class="tabs clearfix" data-tabgroup="first-tab-group">
+                    <li><a class="active" href="#request_data">Request Data</a></li>
+                    <li><a href="#response_data">Response Data</a></li>
+                    <li><a href="#request_headers">Request Headers</a></li>
+                    <li><a href="#response_headers">Response Headers</a></li>
+                </ul>
+                <section class="tabgroup fade-animatable" id="first-tab-group">
+                    <div class="tab-container fade-animatable" id="request_data">
+                    </div>
+                    <div class="tab-container fade-animatable" id="response_data">
+                    </div>
+                    <div class="tab-container fade-animatable" id="request_headers">
+                    </div>
+                    <div class="tab-container fade-animatable" id="response_headers">
+
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <div class="main-requests" id="requests_container">
+        </div>
+    </div>
+
+    <div class="container" style="display: block; width: 100%; float: left;">
+        <footer class="">
+    <span style="font-size: 16px;">Created with <b style="color:red">&#x2665;</b> by <a
+            href="https://github.com/adibfara">Adib Faramarzi</a></a></span>
+        </footer>
+    </div>
+
+</div>
+
+
+<script>
+    hljs.fixMarkup(true);
+    hljs.initHighlightingOnLoad();
+</script>
+<script src="jquery.min.js">
+
+</script>
+<script src="main.js">
+
+</script>
+</body>
+</html>
