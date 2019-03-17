@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit
  * An OkHttp interceptor which logs request and response information to a websocket client (by default). Can be applied as an
  * [application interceptor][OkHttpClient.interceptors] or as a [ ][OkHttpClient.networkInterceptors].
  */
-class WatchTowerInterceptor @JvmOverloads constructor(private vararg val networkEventLoggers: WatchTower, @Volatile private var level: LogLevel = LogLevel.FULL) :
+class WatchTowerInterceptor @JvmOverloads constructor(private val watchtower: WatchTower, @Volatile private var level: LogLevel = LogLevel.FULL) :
     Interceptor {
 
     @Volatile
@@ -51,7 +51,7 @@ class WatchTowerInterceptor @JvmOverloads constructor(private vararg val network
         val request = chain.request()
         val startNs = System.nanoTime()
         val requestData = request.asData(startNs, chain.connection())
-        networkEventLoggers.forEach { it.logRequest(requestData, level) }
+        watchtower.logRequest(requestData, level)
         val response: Response
         try {
             response = chain.proceed(request)
@@ -59,7 +59,7 @@ class WatchTowerInterceptor @JvmOverloads constructor(private vararg val network
             throw e
         }
         val responseData = response.asData(requestData)
-        networkEventLoggers.forEach { it.logResponse(responseData, level) }
+        watchtower.logResponse(responseData, level)
 
         return response
     }

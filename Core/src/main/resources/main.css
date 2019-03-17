@@ -48,8 +48,8 @@ body {
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     font-size: 19px;
-    background-color: #FEFEFE;
-    color: #04143A;
+    background-color: #2c2c2c;
+    color: #5f6060;
 }
 
 ol, ul {
@@ -93,12 +93,13 @@ div, footer {
 .container {
     max-width: 1100px;
     height: auto;
-    margin: 60px auto;
+    margin: 30px auto;
 }
 
 .hero {
-    margin: 50px auto;
+    margin: 20px auto;
     position: relative;
+    color: #b7b7b7;
 }
 
 h1.name {
@@ -197,13 +198,21 @@ h1.name {
 
 
 .card-active, .card:hover {
-    transform: scale(1.02);
-    transition: 0.5s;
+    transform: scale(1.01);
+    transition: 0.2s ease-in;
     background-color: #fff;
-    box-shadow: 0px 5px 50px -8px #ddd;
+    box-shadow: 0px 5px 10px -8px #ddd;
     cursor: pointer;
+    color: #555555;
 }
 
+.card:hover .url h2 {
+    color: #555555;
+}
+
+.card.active .url h2 {
+    color: #555555;
+}
 
 .skill-level {
     display: inline-block;
@@ -360,16 +369,38 @@ li .description {
     display: block;
 }
 
-
 .main-requests {
     float: left;
     width: 50%;
     display: block;
+
+}
+
+#clear-button {
+    float: right;
+    margin-top: 5px;
+    background: none;
+    color: white;
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+}
+
+#clear-button:hover {
+    background: #aaaaaa;
+}
+
+#clear-button:active {
+    background: #c3c3c3;
+}
+
+#requests_container {
+
     overflow: auto;
-    max-height: 60vh;
-    min-height: 60vh;
-    padding: 25px;
-    scrollbars: none;
+    max-height: 75vh;
+    min-height: 75vh;
+    padding: 15px;
+
 
 }
 
@@ -387,7 +418,7 @@ li .description {
 
 .card {
     width: 99%;
-    background-color: #EEF0F7;
+    background-color: #333438;
     display: inline-block;
     margin: 7px 5px;
     vertical-align: top;
@@ -399,12 +430,11 @@ li .description {
 }
 
 .card.failure {
-    background-color: #f7eff0;
 
 }
-
 .url {
     display: block;
+    color: #8899A6;
 }
 
 .url h3 {
@@ -425,11 +455,11 @@ li .description {
 
 .url h2 {
     font-size: 14px;
-    color: #5B6A9A;
+    font-weight: normal !important;
+    color: rgb(196, 203, 201);
     vertical-align: center;
     height: 100%;
     padding-top: 8px;
-    font-weight: 800;
     text-align: left;
     padding-left: 10px;
 
@@ -455,10 +485,11 @@ li .description {
     font-size: 14px;
     font-weight: 600;
 
+
 }
 
 .success .response {
-    color: #4c811e;
+    color: #6EAB0B;
 }
 
 .failure .response {
@@ -480,7 +511,6 @@ li .description {
     float: right;
     text-align: center;
     font-size: 12px;
-    color: #2b303b;
 }
 
 .meta .info .time {
@@ -555,20 +585,22 @@ h1 + p {
     text-align: center;
     text-decoration: none;
     text-transform: uppercase;
-    color: #888;
+    font-weight: bold;
+    color: #979797;
     padding: 20px 0;
     border-bottom: 2px solid #888;
-    background: #f7f7f7;
+    background: #323232;
 }
 
 .tabs a:hover,
 .tabs a.active {
-    background: #ddd;
+    background: #474747;
+    color: #b8b8b8;
 }
 
 .tabgroup div {
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
-    min-height: 400px;
+    min-height: 550px;
     background: #2b303b;
     color: white;
     padding: 20px;

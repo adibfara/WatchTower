@@ -8,11 +8,14 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Header
 
-val eventReporter by lazy {
-
-    WebsocketWatchTower(
+val websocketTowerObserver by lazy {
+    WebsocketTowerObserver(
         8085
     )
+}
+val watchTower by lazy {
+    WatchTower(listOf(websocketTowerObserver))
+
 }
 val testJob = SupervisorJob()
 val javaMainScope = CoroutineScope(Dispatchers.Main + testJob)
@@ -21,7 +24,7 @@ fun main() {
     runBlocking<Unit> {
 
         val interceptor = WatchTowerInterceptor(
-            eventReporter
+            watchTower
         )
         val retrofit = Retrofit.Builder()
             .client(
@@ -38,15 +41,16 @@ fun main() {
                 while (true) {
                     try {
                         val call = retrofit.getExample("of course").execute()
-                        //   println(call.body() ?: " Empty response")
-                        delay(6000)
+                        println(call.body() ?: " Empty response")
+                        delay(3000)
                     } catch (t: Throwable) {
                         t.printStackTrace()
                     }
                 }
             }
         }
-        eventReporter.start(true)
+        watchTower.start()
+        websocketTowerObserver.blockForRequests()
         Unit
     }
 }

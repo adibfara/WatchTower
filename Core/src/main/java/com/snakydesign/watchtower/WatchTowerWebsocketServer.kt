@@ -9,8 +9,10 @@ import java.net.InetSocketAddress
 /**
  * @author Adib Faramarzi (adibfara@gmail.com)
  */
-class WatchTowerWebsocketServer(address: InetSocketAddress) : WebSocketServer(address) {
+class WatchTowerWebsocketServer(address: InetSocketAddress, val messageHandler: WSMessageHandler) :
+    WebSocketServer(address) {
     override fun onOpen(conn: WebSocket?, handshake: ClientHandshake?) {
+        conn?.let { messageHandler.onOpened(it) }
         log("on open")
     }
 
@@ -19,6 +21,7 @@ class WatchTowerWebsocketServer(address: InetSocketAddress) : WebSocketServer(ad
     }
 
     override fun onMessage(conn: WebSocket?, message: String?) {
+
         log("on onMessage")
     }
 
@@ -33,4 +36,8 @@ class WatchTowerWebsocketServer(address: InetSocketAddress) : WebSocketServer(ad
     private fun log(log: String) {
         println(log)
     }
+}
+
+interface WSMessageHandler {
+    fun onOpened(conn: WebSocket)
 }

@@ -3,6 +3,10 @@
 calls = [];
 HTMLElement = typeof (HTMLElement) != 'undefined' ? HTMLElement : Element;
 
+// SCROLL TO BOTTOM
+var out = document.getElementById("requests_container");
+
+
 HTMLElement.prototype.prepend = function (element) {
     if (this.firstChild) {
         return this.insertBefore(element, this.firstChild);
@@ -39,18 +43,21 @@ function addRequest(request) {
         '    }' +
         '  ],' +
         '  "tookTime": 47,' +
-        '  "responseCode": 200,' +
+        '  "responseCode": ' + (Math.random() >= 0.5 ? 500 : 200) + ',' +
         '  "body": {"body" : "{\\"salam\\":true}"},' +
         '  "contentLength": 3700' +
         '}';
-    processRequest(testData);
+    processRequest(JSON.parse(testData));
 }
 
 function processRequest(call) {
-    last_id += 1;
-    call['callId'] = last_id;
-    calls.push(call);
-    document.getElementById("requests_container").append(getRequestHTML(call))
+    if (call.requestData != null) {
+        last_id += 1;
+        call['callId'] = last_id;
+        calls.push(call);
+        document.getElementById("requests_container").append(getRequestHTML(call));
+    }
+
 }
 
 function getJsonHtml(string) {
@@ -126,18 +133,18 @@ function setupClickHandlers() {
         call = calls.find(function (value) {
             return parseInt(value['callId']) === parseInt(clickedId)
         });
-        console.log(call)
+        console.log(call);
         call.requestData.headers.forEach(function (value) {
             $("#request_headers").append("<p> <span class='header_key'>" + value['key'] + " :</span><span class='header_value'>" + value['value'] + "</span></p>")
         });
         call.headers.forEach(function (value) {
             $("#response_headers").append("<p> <span class='header_key'>" + value['key'] + " :</span><span class='header_value'>" + value['value'] + "</span></p>")
         });
-        request_body = (response.requestData.body != null && response.requestData.body.body != null) ?
-            "<pre><code class=\"json\">" + JSON.stringify(JSON.parse(response.requestData.body.body), null, 2) + "</code></pre>"
+        request_body = (call.requestData.body != null && call.requestData.body.body != null) ?
+            "<pre><code class=\"json\">" + JSON.stringify(JSON.parse(call.requestData.body.body), null, 2) + "</code></pre>"
             : "NO REQUEST BODY";
-        response_body = (response.body != null && response.body.body != null) ?
-            "<pre><code class=\"json\">" + JSON.stringify(JSON.parse(response.body.body), null, 2) + "</code></pre>"
+        response_body = (call.body != null && call.body.body != null) ?
+            "<pre><code class=\"json\">" + JSON.stringify(JSON.parse(call.body.body), null, 2) + "</code></pre>"
             : "NO RESPONSE BODY";
         $("#request_data").html(request_body);
         $("#response_data").html(response_body);
@@ -197,10 +204,16 @@ function connectToWebsocket() {
 
         ws.onmessage = function (evt) {
             var data = evt.data;
-            console.log(data);
             var received_msg = JSON.parse(data);
-            console.log(received_msg);
-            processRequest(received_msg);
+            var type = received_msg.type;
+            if (type === 'RESPONSE') {
+                processRequest(received_msg.data);
+            } else if (type === 'BATCH_RESPONSE') {
+                var allResponses = received_msg.data;
+                allResponses.forEach(function (response) {
+                    processRequest(response);
+                })
+            }
             console.log("Message is received...");
 
         };
@@ -217,4 +230,9 @@ function connectToWebsocket() {
     }
 }
 
-connectToWebsocket()
+connectToWebsocket();
+
+$("#clear-button").click(function () {
+    $("#requests_container").html("");
+    $(".data-container").hide()
+});
