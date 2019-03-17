@@ -14,8 +14,8 @@ ext.versions = [
         jfrog              : '4.7.5',
         retrofit           : '2.5.0',
         okhttp             : '3.12.0',
-        ktor               : '1.1.1',
-        kotlinSerialization               : '0.10.0',
+        nanoHTTPd          : '2.2.0',
+        javaWS             : '1.4.0',
 
 
 ]
@@ -32,20 +32,18 @@ ext.gradlePlugins = [
 ]
 
 ext.libs = [
-        androidSdk     : "com.google.android:android:$versions.androidSdk",
-        kotlin         : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin",
-        appcompatV7    : "com.android.support:appcompat-v7:$versions.support",
-        junit          : "junit:junit:$versions.junit",
-        robolectric    : "org.robolectric:robolectric:$versions.robolectric",
-        coroutines     : "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versions.coroutines",
-        mockk          : "io.mockk:mockk:$versions.mockk",
-        retrofit       : "com.squareup.retrofit2:retrofit:$versions.retrofit",
-        retrofitScalars: "com.squareup.retrofit2:converter-scalars:$versions.retrofit",
-        okhttp         : "com.squareup.okhttp3:okhttp:$versions.okhttp",
-        okhttpMock     : "com.squareup.okhttp3:mockwebserver:$versions.okhttp",
-        ktor           : "io.ktor:ktor-server-core:$versions.ktor",
-        ktorServer     : "io.ktor:ktor-server-netty:$versions.ktor",
-        ktorWebSocket  : "io.ktor:ktor-websockets:$versions.ktor",
-        kotlinSerialization    : "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$versions.kotlinSerialization",
+        androidSdk         : "com.google.android:android:$versions.androidSdk",
+        kotlin             : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin",
+        appcompatV7        : "com.android.support:appcompat-v7:$versions.support",
+        junit              : "junit:junit:$versions.junit",
+        robolectric        : "org.robolectric:robolectric:$versions.robolectric",
+        coroutines         : "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versions.coroutines",
+        mockk              : "io.mockk:mockk:$versions.mockk",
+        retrofit           : "com.squareup.retrofit2:retrofit:$versions.retrofit",
+        retrofitScalars    : "com.squareup.retrofit2:converter-scalars:$versions.retrofit",
+        okhttp             : "com.squareup.okhttp3:okhttp:$versions.okhttp",
+        okhttpMock         : "com.squareup.okhttp3:mockwebserver:$versions.okhttp",
+        nanoHTTPd          : "org.nanohttpd:nanohttpd:$versions.nanoHTTPd",
+        javaWS             : "org.java-websocket:Java-WebSocket:$versions.javaWS",
 
 ]

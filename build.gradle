@@ -15,7 +15,6 @@ buildscript {
         classpath gradlePlugins.jfrog
     }
 }
-
 allprojects {
     repositories {
         google()
@@ -27,3 +26,15 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+/*
+subprojects.each { subproject -> evaluationDependsOn(subproject.path)}
+
+task allJar(type: Jar, dependsOn: subprojects.assemble) {
+    baseName = 'your-base-name'
+    subprojects.each { subproject ->
+        from subproject.configurations.archives.allArtifacts.files.collect {
+            zipTree(it)
+        }
+    }
+}*/
