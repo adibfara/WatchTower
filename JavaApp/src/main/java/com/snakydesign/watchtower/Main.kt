@@ -40,7 +40,7 @@ fun main() {
 
                     .build()
             )
-            .baseUrl("https://tap33.me/apis/")
+            .baseUrl("https://tap33.me/api/")
             .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .build().create(TestAPI::class.java)
@@ -50,7 +50,7 @@ fun main() {
                 while (true) {
                     try {
                         val call =
-                            retrofit.getExample("of course", SampleRequestBody("sample id", " sample name")).execute()
+                            retrofit.getExample("of course").execute()
                         println(call.body() ?: " Empty response:\n" + call.message())
                         delay(3000)
                     } catch (t: Throwable) {
@@ -67,6 +67,6 @@ fun main() {
 
 data class SampleRequestBody(val id: String, val name: String)
 interface TestAPI {
-    @POST("v2.1/faq/ticket?adib=true&khiar=1")
-    fun getExample(@Header("khiar") header: String, @Body requestBody: SampleRequestBody): Call<String>
+    @GET("v2/init/passenger")
+    fun getExample(@Header("khiar") header: String): Call<String>
 }

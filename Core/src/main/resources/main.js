@@ -19,7 +19,7 @@ last_id = 0;
 function addRequest(request) {
     testData = '{ ' +
         '    "requestData": {' +
-        '    "url": "http://google.com/salam/asdfasdf/s/fsd//dsf/sdfasfasd/fsdasdfaf/da/fdsffdsadfsd/sd/dsaf",' +
+        '    "url": "http://google.com/salam/asdfasdf?adib=true&khiar=1",' +
         '    "headers": [' +
         '      {' +
         '        "key": "khiar",' +
