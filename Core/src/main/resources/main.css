@@ -598,7 +598,7 @@ h1 + p {
     color: #b8b8b8;
 }
 
-.tabgroup div {
+.tab-container {
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
     min-height: 550px;
     background: #2b303b;
@@ -610,10 +610,6 @@ h1 + p {
     content: "";
     display: table;
     clear: both;
-}
-
-.tab-container {
-
 }
 
 
@@ -638,4 +634,11 @@ DATA
  */
 .data-container {
     display: none;
+}
+
+/*
+Query Params
+*/
+#request_params_container{
+background: #000;
 }

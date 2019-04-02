@@ -67,6 +67,6 @@ fun main() {
 
 data class SampleRequestBody(val id: String, val name: String)
 interface TestAPI {
-    @POST("v2.1/faq/ticket")
+    @POST("v2.1/faq/ticket?adib=true&khiar=1")
     fun getExample(@Header("khiar") header: String, @Body requestBody: SampleRequestBody): Call<String>
 }

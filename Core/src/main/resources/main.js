@@ -135,11 +135,29 @@ function setupClickHandlers() {
         });
         console.log(call);
         call.requestData.headers.forEach(function (value) {
-            $("#request_headers").append("<p> <span class='header_key'>" + value['key'] + " :</span><span class='header_value'>" + value['value'] + "</span></p>")
+            $("#request_headers").append(createHighlightedRow(value['key'], value['value']))
         });
         call.headers.forEach(function (value) {
-            $("#response_headers").append("<p> <span class='header_key'>" + value['key'] + " :</span><span class='header_value'>" + value['value'] + "</span></p>")
+            $("#response_headers").append(createHighlightedRow(value['key'], value['value']))
         });
+        url = call.requestData.url
+        paramHTML = ""
+        if(url.includes("?")){
+
+        params = url.substring(url.lastIndexOf('?'))
+        urlParams = new URLSearchParams(params);
+          urlParams.forEach(function(value,key){
+                        paramHTML+=createHighlightedRow(key, value)
+                })
+        }
+
+        if(paramHTML.length >1){
+                $("#request_params").html(paramHTML)
+                $("#request_params_container").show()
+        }else{
+                        $("#request_params_container").hide()
+
+        }
         request_body = (call.requestData.body != null && call.requestData.body.body != null) ?
            formatBody(call.requestData.body.body)
          : "NO REQUEST BODY";
@@ -153,6 +171,11 @@ function setupClickHandlers() {
                                                              });
     });
 
+
+}
+
+function createHighlightedRow(key, value){
+return            "<p> <span class='header_key'>" + key + " :</span><span class='header_value'>" + value + "</span></p>"
 
 }
 

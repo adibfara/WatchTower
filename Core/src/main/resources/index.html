@@ -23,15 +23,20 @@
         <div class="main-viewer">
             <div class="wrapper data-container fade-animatable">
                 <ul class="tabs clearfix" data-tabgroup="first-tab-group">
-                    <li><a class="active" href="#request_data">Request Data</a></li>
-                    <li><a href="#response_data">Response Data</a></li>
+                    <li><a class="active" href="#request_container">Request Data</a></li>
+                    <li><a href="#response_container">Response Data</a></li>
                     <li><a href="#request_headers">Request Headers</a></li>
                     <li><a href="#response_headers">Response Headers</a></li>
                 </ul>
                 <section class="tabgroup fade-animatable" id="first-tab-group">
-                    <div class="tab-container fade-animatable" id="request_data">
+                    <div class="tab-container fade-animatable" id="request_container">
+                        <div id="request_params_container">
+                            <div id="request_params"></div>
+                        </div>
+                        <div id="request_data"></div>
                     </div>
-                    <div class="tab-container fade-animatable" id="response_data">
+                    <div class="tab-container fade-animatable" id="response_container">
+                        <div id="response_data"></div>
                     </div>
                     <div class="tab-container fade-animatable" id="request_headers">
                     </div>
