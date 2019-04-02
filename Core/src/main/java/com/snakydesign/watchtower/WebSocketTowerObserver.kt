@@ -10,7 +10,8 @@ import java.nio.charset.Charset
 /**
  * @author Adib Faramarzi (adibfara@gmail.com)
  */
-class WebsocketTowerObserver constructor(private val port: Int) : TowerObserver(), WSMessageHandler {
+class WebSocketTowerObserver constructor(private val port: Int) : TowerObserver(),
+    WatchTowerWebSocketServer.MessageHandler {
 
 
     private val html: String by lazy {
@@ -25,7 +26,7 @@ class WebsocketTowerObserver constructor(private val port: Int) : TowerObserver(
     private val jqueryFile: String =
         this.javaClass.classLoader.getResourceAsStream("jquery.min.js").readBytes().toString(Charset.defaultCharset())
     private lateinit var server: WatchTowerServer
-    private lateinit var websocketServer: WatchTowerWebsocketServer
+    private lateinit var websocketServer: WatchTowerWebSocketServer
     private var isStarted = false
     private var allResponses = mutableListOf<ResponseData>()
 
@@ -43,25 +44,25 @@ class WebsocketTowerObserver constructor(private val port: Int) : TowerObserver(
             isStarted = true
             serverThread = Thread {
                 server = WatchTowerServer(port, html, cssFile, javascriptFile, jqueryFile)
-                server.start(1000, false)
+                server.start(3000, false)
             }.apply {
                 start()
             }
 
             websocketThread = Thread {
-                websocketServer = WatchTowerWebsocketServer(InetSocketAddress(5003), this@WebsocketTowerObserver)
+                websocketServer = WatchTowerWebSocketServer(InetSocketAddress(5003), this@WebSocketTowerObserver)
                 websocketServer.start()
             }.apply {
                 start()
             }
 
         } else {
-            throw Exception("Server is already started. Please stop if before starting using `stop()` function.")
+            throw Exception("Server is already started. Please stop if before starting it again, using `stop()` method.")
         }
     }
 
     private fun checkIfEngineStarted() {
-        if (!isStarted) throw Exception("Engine was never started! use WebtSocketEventReported.start() to start it.")
+        if (!isStarted) throw Exception("Engine is not started! use WebSocketEventReported.start() to start it.")
     }
 
     fun blockForRequests() {
@@ -123,7 +124,7 @@ internal sealed class WebsocketMessage(val type: String, open val data: String) 
     data class Response(val response: ResponseData) : WebsocketMessage("RESPONSE", response.toJson())
     data class Request(val request: RequestData) : WebsocketMessage("REQUEST", request.toJson())
     data class BatchResponse(val responses: List<ResponseData>) :
-        WebsocketMessage("BATCH_RESPONSE", responses.map { it.toJson() }.joinToString(",", prefix = "[", postfix = "]"))
+        WebsocketMessage("BATCH_RESPONSE", responses.joinToString(",", prefix = "[", postfix = "]") { it.toJson() })
 
     fun toJson(): String {
         return """

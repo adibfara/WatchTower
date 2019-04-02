@@ -186,7 +186,7 @@ function getCurrentTime() {
  WEBSOCKET
  **/
 
-function connectToWebsocket() {
+function connectToWebSocket() {
 
     if ("WebSocket" in window) {
 
@@ -230,7 +230,7 @@ function connectToWebsocket() {
     }
 }
 
-connectToWebsocket();
+connectToWebSocket();
 
 $("#clear-button").click(function () {
     $("#requests_container").html("");

@@ -9,7 +9,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 
 val websocketTowerObserver by lazy {
-    WebsocketTowerObserver(
+    WebSocketTowerObserver(
         8085
     )
 }
