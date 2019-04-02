@@ -7,7 +7,7 @@ import java.io.InputStream
 /**
  * @author Adib Faramarzi (adibfara@gmail.com)
  */
-internal class WatchTowerServer(
+internal class WatchTowerHTTPServer(
     port: Int,
     html: String,
     cssFile: String,
@@ -18,9 +18,9 @@ internal class WatchTowerServer(
         "/" to html
     )
     private val files = mapOf(
-        "/main.css" to cssFile,
-        "/main.js" to javascriptFile,
-        "/jquery.min.js" to jqueryFile
+        "/main.css" to Pair(cssFile, "text/css"),
+        "/main.js" to Pair(javascriptFile, "application/javascript"),
+        "/jquery.min.js" to Pair(jqueryFile, "application/javascript")
     )
 
     override fun serve(session: IHTTPSession?): Response {
@@ -31,8 +31,8 @@ internal class WatchTowerServer(
                 files[session.uri]?.let {
                     return newFixedLengthResponse(
                         fi.iki.elonen.NanoHTTPD.Response.Status.OK,
-                        "text/css",
-                        it
+                        it.second,
+                        it.first
                     )
                 }
             }

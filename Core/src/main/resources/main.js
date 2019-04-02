@@ -141,19 +141,28 @@ function setupClickHandlers() {
             $("#response_headers").append("<p> <span class='header_key'>" + value['key'] + " :</span><span class='header_value'>" + value['value'] + "</span></p>")
         });
         request_body = (call.requestData.body != null && call.requestData.body.body != null) ?
-            "<pre><code class=\"json\">" + JSON.stringify(JSON.parse(call.requestData.body.body), null, 2) + "</code></pre>"
-            : "NO REQUEST BODY";
+           formatBody(call.requestData.body.body)
+         : "NO REQUEST BODY";
         response_body = (call.body != null && call.body.body != null) ?
-            "<pre><code class=\"json\">" + JSON.stringify(JSON.parse(call.body.body), null, 2) + "</code></pre>"
+            formatBody(call.body.body)
             : "NO RESPONSE BODY";
         $("#request_data").html(request_body);
         $("#response_data").html(response_body);
-        hljs.highlightBlock(document.querySelector('code'))
+        document.querySelectorAll('code').forEach(function(codeBlock) {
+                                                               hljs.highlightBlock(codeBlock);
+                                                             });
     });
 
 
 }
 
+function formatBody(body){
+try{
+return "<pre><code class=\"json\">" + JSON.stringify(JSON.parse(body), null, 2) + "</code></pre>"
+} catch {
+return body
+}
+}
 setupClickHandlers();
 
 
@@ -214,7 +223,6 @@ function connectToWebSocket() {
                     processRequest(response);
                 })
             }
-            console.log("Message is received...");
 
         };
 

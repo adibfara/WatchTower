@@ -17,26 +17,11 @@ import java.util.concurrent.TimeUnit
  * An OkHttp interceptor which logs request and response information to a websocket client (by default). Can be applied as an
  * [application interceptor][OkHttpClient.interceptors] or as a [ ][OkHttpClient.networkInterceptors].
  */
-class WatchTowerInterceptor @JvmOverloads constructor(private val watchtower: WatchTower, @Volatile private var level: LogLevel = LogLevel.FULL) :
-    Interceptor {
+class WatchTowerInterceptor constructor(private val watchtower: WatchTower) : Interceptor {
 
     @Volatile
     private var headersToRedact = emptySet<String>()
 
-    enum class LogLevel {
-        /**
-         * Does not log anything.
-         */
-        NONE,
-        /**
-         * Logs request and response lines and their respective headers.
-         */
-        HEADERS,
-        /**
-         * Logs request and response lines and their respective headers and bodies (if present).
-         */
-        FULL
-    }
 
     fun redactHeader(name: String) {
         val newHeadersToRedact = TreeSet(String.CASE_INSENSITIVE_ORDER)
@@ -51,7 +36,7 @@ class WatchTowerInterceptor @JvmOverloads constructor(private val watchtower: Wa
         val request = chain.request()
         val startNs = System.nanoTime()
         val requestData = request.asData(startNs, chain.connection())
-        watchtower.logRequest(requestData, level)
+        watchtower.logRequest(requestData)
         val response: Response
         try {
             response = chain.proceed(request)
@@ -59,7 +44,7 @@ class WatchTowerInterceptor @JvmOverloads constructor(private val watchtower: Wa
             throw e
         }
         val responseData = response.asData(requestData)
-        watchtower.logResponse(responseData, level)
+        watchtower.logResponse(responseData)
 
         return response
     }
@@ -74,7 +59,7 @@ class WatchTowerInterceptor @JvmOverloads constructor(private val watchtower: Wa
             val buffer = Buffer()
             requestBody!!.writeTo(buffer)
 
-            val charset = requestBody.contentType()?.charset(UTF8) ?: UTF8
+            val charset = requestBody.contentType()?.charset(Charset.forName("UTF-8")) ?: Charset.forName("UTF-8")
 
             val body = try {
                 val bufferedSink = Buffer()
@@ -97,38 +82,21 @@ class WatchTowerInterceptor @JvmOverloads constructor(private val watchtower: Wa
 
     private fun Response.asData(requestData: RequestData): ResponseData {
         val response = this
-
         val tookTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - requestData.requestTime)
-
         val body = response.body()
-        val contentLength = body?.contentLength() ?: 0
-
-        val responseHeaders = response.headers()
         val responseDataHeaders = response.headers().asDataHeaders(headersToRedact)
-        val responseBody: NetworkContent = if (HttpHeaders.hasBody(response) && contentLength > 0) {
-            if (response.headers().bodyHasUnknownEncoding() && contentLength > 0) {
-                ContentBody(contentLength, "[Body omitted, because it has unknown encoding]", null)
-            } else {
-                val source = body!!.source()
-                source.request(java.lang.Long.MAX_VALUE) // Buffer the entire body.
-                val buffer = source.buffer()
-                val gzipLength: Long? = if ("gzip".equals(responseHeaders.get("Content-Encoding"), ignoreCase = true)) {
-                    buffer.size()
-                } else {
-                    null
-                }
-                val encoding = body.contentType()?.charset() ?: UTF8
-                val bodyString = try {
-                    buffer.clone().readString(encoding)
-                } catch (e: Throwable) {
-                    ""
-                }
-                ContentBody(contentLength, bodyString, gzipLength)
-            }
+        val responseBody: NetworkContent
+        if (HttpHeaders.hasBody(response)) {
 
+            val bodyString = (body!!.getAsString() ?: "")
+            val contentLength = body.contentLength()
+
+            responseBody = ContentBody(contentLength, bodyString, null)
 
         } else {
-            EmptyBody()
+            val content = response.message()
+            val contentLength = content.length.toLong()
+            responseBody = ContentBody(contentLength, content, null)
         }
 
 
@@ -164,7 +132,18 @@ class WatchTowerInterceptor @JvmOverloads constructor(private val watchtower: Wa
         return finalList
     }
 
-    companion object {
-        private val UTF8 = Charset.forName("UTF-8")
+    private fun ResponseBody.getAsString(): String? {
+        val source = source()
+        source.request(java.lang.Long.MAX_VALUE) // Buffer the entire body.
+        val buffer = source.buffer()
+        val encoding = contentType()?.charset() ?: Charset.forName("UTF-8")
+        return try {
+            buffer.clone().readString(encoding)
+        } catch (e: Throwable) {
+            null
+        }
+
     }
+
 }
+

@@ -17,19 +17,19 @@ class WatchTower(private val callObservers: List<TowerObserver>, private val num
         return latestResponses.toList()
     }
 
-    fun logRequest(requestSent: RequestData, logLevel: WatchTowerInterceptor.LogLevel) {
+    fun logRequest(requestSent: RequestData) {
         if (isRunning) {
             callObservers.forEach {
-                it.logRequest(requestSent, logLevel)
+                it.logRequest(requestSent)
             }
         }
     }
 
-    fun logResponse(responseReceived: ResponseData, logLevel: WatchTowerInterceptor.LogLevel) {
+    fun logResponse(responseReceived: ResponseData) {
         if (isRunning) {
 
             callObservers.forEach {
-                it.logResponse(responseReceived, logLevel)
+                it.logResponse(responseReceived)
             }
             latestResponses.put(responseReceived)
         }

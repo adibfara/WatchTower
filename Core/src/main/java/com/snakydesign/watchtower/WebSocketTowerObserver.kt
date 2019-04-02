@@ -25,7 +25,7 @@ class WebSocketTowerObserver constructor(private val port: Int) : TowerObserver(
         this.javaClass.classLoader.getResourceAsStream("main.js").readBytes().toString(Charset.defaultCharset())
     private val jqueryFile: String =
         this.javaClass.classLoader.getResourceAsStream("jquery.min.js").readBytes().toString(Charset.defaultCharset())
-    private lateinit var server: WatchTowerServer
+    private lateinit var server: WatchTowerHTTPServer
     private lateinit var websocketServer: WatchTowerWebSocketServer
     private var isStarted = false
     private var allResponses = mutableListOf<ResponseData>()
@@ -43,7 +43,7 @@ class WebSocketTowerObserver constructor(private val port: Int) : TowerObserver(
         if (!isStarted) {
             isStarted = true
             serverThread = Thread {
-                server = WatchTowerServer(port, html, cssFile, javascriptFile, jqueryFile)
+                server = WatchTowerHTTPServer(port, html, cssFile, javascriptFile, jqueryFile)
                 server.start(3000, false)
             }.apply {
                 start()
@@ -81,15 +81,15 @@ class WebSocketTowerObserver constructor(private val port: Int) : TowerObserver(
     }
 
 
-    override fun showRequest(requestSent: RequestData, logLevel: WatchTowerInterceptor.LogLevel) {
+    override fun showRequest(requestSent: RequestData) {
         checkIfEngineStarted()
-        sendMessage(WebsocketMessage.Request(requestSent))
+        sendMessage(WebSocketMessage.Request(requestSent))
     }
 
-    override fun showResponse(responseReceived: ResponseData, logLevel: WatchTowerInterceptor.LogLevel) {
+    override fun showResponse(responseReceived: ResponseData) {
         checkIfEngineStarted()
         allResponses.add(responseReceived)
-        sendMessage(WebsocketMessage.Response(responseReceived))
+        sendMessage(WebSocketMessage.Response(responseReceived))
     }
 
     override fun showAllResponses(responseReceived: List<ResponseData>) {
@@ -97,12 +97,12 @@ class WebSocketTowerObserver constructor(private val port: Int) : TowerObserver(
         allResponses.addAll(responseReceived)
     }
 
-    override fun onOpened(conn: WebSocket) {
+    override fun onOpened(connection: WebSocket) {
         checkIfEngineStarted()
-        conn.send(WebsocketMessage.BatchResponse(allResponses).toJson())
+        connection.send(WebSocketMessage.BatchResponse(allResponses).toJson())
     }
 
-    private fun sendMessage(message: WebsocketMessage) {
+    private fun sendMessage(message: WebSocketMessage) {
         websocketServer.broadcast(message.toJson())
     }
 
@@ -118,20 +118,20 @@ class WebSocketTowerObserver constructor(private val port: Int) : TowerObserver(
 
     }
 
-}
+    internal sealed class WebSocketMessage(val type: String, open val data: String) {
+        data class Response(val response: ResponseData) : WebSocketMessage("RESPONSE", response.toJson())
+        data class Request(val request: RequestData) : WebSocketMessage("REQUEST", request.toJson())
+        data class BatchResponse(val responses: List<ResponseData>) :
+            WebSocketMessage("BATCH_RESPONSE", responses.joinToString(",", prefix = "[", postfix = "]") { it.toJson() })
 
-internal sealed class WebsocketMessage(val type: String, open val data: String) {
-    data class Response(val response: ResponseData) : WebsocketMessage("RESPONSE", response.toJson())
-    data class Request(val request: RequestData) : WebsocketMessage("REQUEST", request.toJson())
-    data class BatchResponse(val responses: List<ResponseData>) :
-        WebsocketMessage("BATCH_RESPONSE", responses.joinToString(",", prefix = "[", postfix = "]") { it.toJson() })
-
-    fun toJson(): String {
-        return """
+        fun toJson(): String {
+            return """
             {
             "type": "$type",
             "data": $data
             }
         """.trimIndent()
+        }
     }
 }
+

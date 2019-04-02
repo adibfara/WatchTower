@@ -2,11 +2,15 @@ package com.snakydesign.watchtower
 
 import kotlinx.coroutines.*
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.POST
 
 val websocketTowerObserver by lazy {
     WebSocketTowerObserver(
@@ -30,18 +34,24 @@ fun main() {
             .client(
                 OkHttpClient.Builder().addInterceptor(
                     interceptor
-                ).build()
+                )/*.addInterceptor(HttpLoggingInterceptor().apply {
+                    setLevel(HttpLoggingInterceptor.Level.BODY)
+                } )*/
+
+                    .build()
             )
-            .baseUrl("https://tap33.me/api/")
+            .baseUrl("https://tap33.me/apis/")
             .addConverterFactory(ScalarsConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
             .build().create(TestAPI::class.java)
 
         javaMainScope.launch(Dispatchers.IO + testJob) {
             withContext(Dispatchers.IO) {
                 while (true) {
                     try {
-                        val call = retrofit.getExample("of course").execute()
-                        println(call.body() ?: " Empty response")
+                        val call =
+                            retrofit.getExample("of course", SampleRequestBody("sample id", " sample name")).execute()
+                        println(call.body() ?: " Empty response:\n" + call.message())
                         delay(3000)
                     } catch (t: Throwable) {
                         t.printStackTrace()
@@ -55,8 +65,8 @@ fun main() {
     }
 }
 
+data class SampleRequestBody(val id: String, val name: String)
 interface TestAPI {
-    @GET("v2")
-
-    fun getExample(@Header("khiar") header: String): Call<String>
+    @POST("v2.1/faq/ticket")
+    fun getExample(@Header("khiar") header: String, @Body requestBody: SampleRequestBody): Call<String>
 }

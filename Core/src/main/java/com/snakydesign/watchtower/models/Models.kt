@@ -17,7 +17,13 @@ data class EmptyBody(val isUsed: Boolean = false) : NetworkContent() {
 }
 
 private fun String.toJson(): String {
-    return this.replace("\"", "\\\"")
+    return this.replace("\\", "\\\\")
+        .replace("\"", "\\\"")
+        .replace("\b", "\\b")
+        .replace("\\u000C", "\\f")
+        .replace("\n", "\\n")
+        .replace("\r", "\\r")
+        .replace("\t", "\\t")
 }
 
 data class ContentBody(val contentLength: Long, val body: String, val gzippedLength: Long?) :
@@ -110,15 +116,15 @@ abstract class TowerObserver {
             }
         }
 
-    internal fun logRequest(requestSent: RequestData, logLevel: WatchTowerInterceptor.LogLevel) {
+    internal fun logRequest(requestSent: RequestData) {
         if (_isEnabled) {
-            showRequest(requestSent, logLevel)
+            showRequest(requestSent)
         }
     }
 
-    internal fun logResponse(responseReceived: ResponseData, logLevel: WatchTowerInterceptor.LogLevel) {
+    internal fun logResponse(responseReceived: ResponseData) {
         if (_isEnabled) {
-            showResponse(responseReceived, logLevel)
+            showResponse(responseReceived)
         }
     }
 
@@ -134,8 +140,8 @@ abstract class TowerObserver {
         this._isEnabled = isEnabled
     }
 
-    abstract fun showRequest(requestSent: RequestData, logLevel: WatchTowerInterceptor.LogLevel)
-    abstract fun showResponse(responseReceived: ResponseData, logLevel: WatchTowerInterceptor.LogLevel)
+    abstract fun showRequest(requestSent: RequestData)
+    abstract fun showResponse(responseReceived: ResponseData)
     abstract fun showAllResponses(responseReceived: List<ResponseData>)
     open fun shutDown() {
 

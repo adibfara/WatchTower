@@ -41,8 +41,10 @@ ext.libs = [
         mockk              : "io.mockk:mockk:$versions.mockk",
         retrofit           : "com.squareup.retrofit2:retrofit:$versions.retrofit",
         retrofitScalars    : "com.squareup.retrofit2:converter-scalars:$versions.retrofit",
+        retrofitGson    : "com.squareup.retrofit2:converter-gson:$versions.retrofit",
         okhttp             : "com.squareup.okhttp3:okhttp:$versions.okhttp",
         okhttpMock         : "com.squareup.okhttp3:mockwebserver:$versions.okhttp",
+        okhttpLog         : "com.squareup.okhttp3:logging-interceptor:$versions.okhttp",
         nanoHTTPd          : "org.nanohttpd:nanohttpd:$versions.nanoHTTPd",
         javaWS             : "org.java-websocket:Java-WebSocket:$versions.javaWS",
 
