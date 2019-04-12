@@ -16,10 +16,16 @@ HTMLElement.prototype.prepend = function (element) {
 };
 last_id = 0;
 
-function addRequest(request) {
+function addTestRequest(request) {
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for (var i = 0; i < 8; i++)
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
     testData = '{ ' +
         '    "requestData": {' +
-        '    "url": "http://google.com/salam/asdfasdf?adib=true&khiar=1",' +
+        '    "url": "http://google.com/hello/' + text + '?adib=true&khiar=1",' +
         '    "headers": [' +
         '      {' +
         '        "key": "khiar",' +
@@ -56,6 +62,7 @@ function processRequest(call) {
         call['callId'] = last_id;
         calls.push(call);
         document.getElementById("requests_container").append(getRequestHTML(call));
+        applySearch();
     }
 
 }
@@ -93,36 +100,27 @@ function getRequestHTML(response) {
         '                     <div class="response">' +
         '                       <span class="length">' +
         '                           ' + success + ' ' + responseCode + '' +
+        '                         </span><span class="response_length">' +
+        '                             <strong>' + contentLength + '</strong> Kilobytes' +
         '                         </span>' +
         '                     </div>' +
         '                     <div class="date-container">' +
-        '                         <span class="date">' +
-        '                             ' + getCurrentTime() + '</>' +
-        '                         </span>' + '</div>' +
-        '                     <div class="info">' +
-        '                         <span class="length">' +
-        '                             <strong>' + contentLength + '</strong> Kilobytes' +
-        '                         </span>' +
         '                         <span class="time">' +
         '                             <strong>' + tookTime + '</strong>ms' +
+        '                         </span><span class="date">' +
+        '                             ' + getCurrentTime() + '</>' +
         '                         </span>' +
-        '                     </div>' +
+        '                         ' + '</div>' +
+        '                     ' +
         '                 </div>' +
         '             </div>')
 }
 
-/*
-only for testing purposes
-addRequest("khiar");
-setInterval(function () {
-    addRequest("khiar")
-}, 1000);
-*/
 
 function setupClickHandlers() {
     $(document).on('click', '.request', function () {
         $(".request").removeClass("active");
-        $(this).addClass("active");
+        $(".selected-card").html($(this).clone().prop('id', 'selected_active_card')).off("click").off('mouseenter mouseleave').off('hover').unbind();
         var clickedId = (this.id);
         console.log(clickedId);
         $("#request_headers").html("");
@@ -142,50 +140,61 @@ function setupClickHandlers() {
         });
         url = call.requestData.url
         paramHTML = ""
-        if(url.includes("?")){
+        if (url.includes("?")) {
 
-        params = url.substring(url.lastIndexOf('?'))
-        urlParams = new URLSearchParams(params);
-          urlParams.forEach(function(value,key){
-                        paramHTML+=createHighlightedRow(key, value)
-                })
+            params = url.substring(url.lastIndexOf('?'))
+            urlParams = new URLSearchParams(params);
+            urlParams.forEach(function (value, key) {
+                paramHTML += createHighlightedRow(key, value)
+            })
         }
 
-        if(paramHTML.length >1){
-                $("#request_params").html(paramHTML)
-                $("#request_params_container").show()
-        }else{
-                        $("#request_params_container").hide()
+        if (paramHTML.length > 1) {
+            $("#request_params").html(paramHTML);
+            $("#request_params_container").show()
+        } else {
+            $("#request_params_container").hide()
 
         }
         request_body = (call.requestData.body != null && call.requestData.body.body != null) ?
-           formatBody(call.requestData.body.body)
-         : "NO REQUEST BODY";
+            formatBody(call.requestData.body.body)
+            : "NO REQUEST BODY";
         response_body = (call.body != null && call.body.body != null) ?
             formatBody(call.body.body)
             : "NO RESPONSE BODY";
         $("#request_data").html(request_body);
         $("#response_data").html(response_body);
-        document.querySelectorAll('code').forEach(function(codeBlock) {
-                                                               hljs.highlightBlock(codeBlock);
-                                                             });
+        document.querySelectorAll('code').forEach(function (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        });
+        window.scrollTo({top: 0, behavior: 'smooth'});
+        $(".main-requests").addClass("card-hider");
+
+        $(".selected-card-container").show();
     });
 
 
 }
 
-function createHighlightedRow(key, value){
-return            "<p> <span class='header_key'>" + key + " :</span><span class='header_value'>" + value + "</span></p>"
+$(".previous").on("click", function () {
+    $(".main-requests").removeClass("card-hider");
+    $(".data-container").hide();
+    $(".selected-card-container").hide();
+});
+
+function createHighlightedRow(key, value) {
+    return "<p> <span class='header_key'>" + key + " :</span><span class='header_value'>" + value + "</span></p>"
 
 }
 
-function formatBody(body){
-try{
-return "<pre><code class=\"json\">" + JSON.stringify(JSON.parse(body), null, 2) + "</code></pre>"
-} catch {
-return body
+function formatBody(body) {
+    try {
+        return "<pre><code class=\"json\">" + JSON.stringify(JSON.parse(body), null, 2) + "</code></pre>"
+    } catch (error) {
+        return body
+    }
 }
-}
+
 setupClickHandlers();
 
 
@@ -267,3 +276,25 @@ $("#clear-button").click(function () {
     $("#requests_container").html("");
     $(".data-container").hide()
 });
+$("#url_search").on('keyup', function () {
+    applySearch()
+});
+
+function applySearch() {
+    console.log('searching');
+    var value = $("#url_search").val().toLowerCase();
+    $(".card").each(function () {
+        if ($(this).find(".url h2").text().toLowerCase().search(value) > -1) {
+            $(this).show();
+        } else {
+            $(this).hide();
+        }
+    });
+}
+
+/*
+only for testing purposes*/
+addTestRequest("khiar");
+setInterval(function () {
+    addTestRequest("khiar")
+}, 1000);

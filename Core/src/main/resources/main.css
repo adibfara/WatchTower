@@ -96,44 +96,12 @@ div, footer {
     margin: 30px auto;
 }
 
-.hero {
-    margin: 20px auto;
-    position: relative;
-    color: #b7b7b7;
-}
-
 h1.name {
     font-size: 70px;
     font-weight: 300;
     display: inline-block;
 }
 
-.job-title {
-    vertical-align: top;
-    background-color: #D9E7F8;
-    color: #4A90E2;
-    font-weight: 600;
-    margin-top: 5px;
-    margin-left: 20px;
-    border-radius: 5px;
-    display: inline-block;
-    padding: 15px 25px;
-}
-
-.email {
-    display: block;
-    font-size: 24px;
-    font-weight: 300;
-    color: #81899C;
-    margin-top: 10px;
-}
-
-.lead {
-    font-size: 44px;
-    font-weight: 300;
-    margin-top: 60px;
-    line-height: 55px;
-}
 
 /*hero ends*/
 
@@ -369,13 +337,6 @@ li .description {
     display: block;
 }
 
-.main-requests {
-    float: left;
-    width: 50%;
-    display: block;
-
-}
-
 #clear-button {
     float: right;
     margin-top: 5px;
@@ -410,11 +371,26 @@ li .description {
     background: rgb(243, 253, 255);
 }
 
+.hero {
+    margin: 20px auto;
+    position: relative;
+    color: #b7b7b7;
+}
+
 .main-viewer {
     float: left;
     width: 50%;
     display: block;
 }
+
+
+.main-requests {
+    float: left;
+    width: 50%;
+    display: block;
+
+}
+
 
 .card {
     width: 99%;
@@ -432,6 +408,7 @@ li .description {
 .card.failure {
 
 }
+
 .url {
     display: block;
     color: #8899A6;
@@ -497,11 +474,16 @@ li .description {
 
 }
 
-.meta .info .length {
-    font-size: 14px;
+.response_length {
+    font-size: 10px;
+    color: #5f6060;
 
 }
 
+.response_length strong {
+    font-weight: bold;
+    font-size: 14px;
+}
 .meta .date {
 
 
@@ -639,7 +621,7 @@ DATA
 /*
 Query Params
 */
-#request_params_container{
+#request_params_container {
     background: #303540;
     border-bottom: 1px solid rgba(0, 0, 0, 0.41);
     margin: -20px -20px 10px -20px;
@@ -649,4 +631,127 @@ Query Params
 #params_title {
     font-size: 16px;
     font-weight: bold;
+}
+
+/*
+Search Box
+ */
+.search_box {
+    width: 244px;
+    outline: 0;
+    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    margin: 0 auto;
+}
+
+.search_box > .textbox {
+    outline: 0;
+    height: 42px;
+    width: 244px;
+    line-height: 42px;
+    padding: 0 16px;
+    background-color: rgba(255, 255, 255, 0.8);
+    color: #212121;
+    border: 0;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+}
+
+.search_box > .textbox:focus {
+    outline: 0;
+    background-color: #FFF;
+}
+
+/**
+Detail view
+ */
+.selected-card-container {
+    padding: 0 5px;
+    display: none;
+}
+
+.previous {
+    background-color: #f1f1f1;
+    color: black;
+    border-radius: 50%;
+    text-decoration: none;
+
+    width: 32px;
+    height: 32px;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 20px;
+    outline: 0;
+    border: 0;
+    margin: auto;
+    background-color: rgba(255, 255, 255, 0.8);
+    display: inline-block;
+    vertical-align: middle;
+    white-space: normal;
+}
+
+.previous:hover {
+    background-color: #f6f6f6;
+    color: black;
+}
+
+.selected-card {
+    width: 85vw;
+    float: right;
+}
+
+/**
+Responsive
+ */
+
+@media only screen and (max-width: 768px) {
+
+    .main-viewer {
+        float: left;
+        width: 100%;
+        display: block;
+    }
+
+
+    .main-requests {
+        float: left;
+        width: 100%;
+        display: block;
+
+    }
+
+    h1.name {
+        font-size: 24px;
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    .hero {
+
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    .tab-container {
+        max-height: 65vh;
+        min-height: 65vh;
+    }
+
+    .container {
+        margin: 10px auto;
+    }
+
+    .wrapper {
+        margin: 5px auto;
+    }
+
+    .card-hider {
+        display: none;
+    }
+
+    .detail-view {
+
+    }
 }
