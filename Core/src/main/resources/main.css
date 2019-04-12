@@ -668,7 +668,7 @@ Search Box
 Detail view
  */
 .selected-card-container {
-    padding: 0 5px;
+    padding: 0 10px;
     display: none;
 }
 
@@ -686,6 +686,7 @@ Detail view
     outline: 0;
     border: 0;
     margin: auto;
+    margin-top: 25px;
     background-color: rgba(255, 255, 255, 0.8);
     display: inline-block;
     vertical-align: middle;
