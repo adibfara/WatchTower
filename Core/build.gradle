@@ -6,10 +6,7 @@ apply from: rootProject.file('artifactory.gradle')
 
 dependencies {
 
-    implementation libs.retrofit
     implementation libs.kotlin
-    implementation libs.nanoHTTPd
-    implementation libs.javaWS
     testImplementation libs.junit
     testImplementation libs.mockk
     testImplementation libs.okhttp

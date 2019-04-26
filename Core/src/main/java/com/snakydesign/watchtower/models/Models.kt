@@ -1,7 +1,5 @@
 package com.snakydesign.watchtower.models
 
-import com.snakydesign.watchtower.WatchTowerInterceptor
-
 /**
  * @author Adib Faramarzi (adibfara@gmail.com)
  */

@@ -358,8 +358,8 @@ li .description {
 #requests_container {
 
     overflow: auto;
-    max-height: 75vh;
-    min-height: 75vh;
+    min-height: 610px;
+    max-height: 610px;
     padding: 15px;
 
 
@@ -672,6 +672,10 @@ Detail view
     display: none;
 }
 
+.selected-card-container.active {
+    padding: 0 10px;
+    display: none;
+}
 .previous {
     background-color: #f1f1f1;
     color: black;
@@ -754,5 +758,9 @@ Responsive
 
     .detail-view {
 
+    }
+
+    .selected-card-container.active {
+        display: block;
     }
 }

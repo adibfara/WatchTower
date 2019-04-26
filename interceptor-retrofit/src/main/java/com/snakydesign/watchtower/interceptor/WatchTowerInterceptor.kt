@@ -1,9 +1,10 @@
-package com.snakydesign.watchtower
+package com.snakydesign.watchtower.interceptor
 
 /**
  * @author Adib Faramarzi (adibfara@gmail.com)
  */
 
+import com.snakydesign.watchtower.WatchTower
 import com.snakydesign.watchtower.models.*
 import okhttp3.*
 import okhttp3.internal.http.HttpHeaders

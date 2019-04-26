@@ -40,7 +40,7 @@ function getRequestHTML(response) {
     isSuccess = (responseCode >= 200 && responseCode < 300);
     classname = isSuccess ? 'success' : 'failure';
     success = isSuccess ? "SUCCESS" : "FAILED";
-    contentLength = response.contentLength / 1000;
+    contentLength = parseInt(response.contentLength / 1000);
     return htmlToElement('<div class="animatable request card ' + classname + '" id="' + id + '">' +
         '                 <div class="url">' +
         '                     <h3>' + method + '</h3>' +
@@ -68,7 +68,7 @@ function getRequestHTML(response) {
 
 
 function setupClickHandlers() {
-    $(document).on('click', '.request', function () {
+    $(document).on('click', '.request', function (element) {
         $(".request").removeClass("active");
         $(".selected-card").html($(this).clone().prop('id', 'selected_active_card')).off("click").off('mouseenter mouseleave').off('hover').unbind();
         var clickedId = (this.id);
@@ -120,7 +120,8 @@ function setupClickHandlers() {
         window.scrollTo({top: 0, behavior: 'smooth'});
         $(".main-requests").addClass("card-hider");
 
-        $(".selected-card-container").show();
+        $(".selected-card-container").addClass("active");
+        $(this).addClass("active");
     });
 
 
@@ -129,7 +130,7 @@ function setupClickHandlers() {
 $(".previous").on("click", function () {
     $(".main-requests").removeClass("card-hider");
     $(".data-container").hide();
-    $(".selected-card-container").hide();
+    $(".selected-card-container").removeClass("active");
 });
 
 function createHighlightedRow(key, value) {

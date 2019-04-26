@@ -1,8 +1,6 @@
-package com.snakydesign.watchtower
+package com.snakydesign.watchtower.interceptor
 
 import fi.iki.elonen.NanoHTTPD
-import java.io.File
-import java.io.InputStream
 
 /**
  * @author Adib Faramarzi (adibfara@gmail.com)

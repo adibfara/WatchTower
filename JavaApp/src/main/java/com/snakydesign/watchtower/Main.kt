@@ -1,16 +1,15 @@
 package com.snakydesign.watchtower
 
+import com.snakydesign.watchtower.interceptor.WatchTowerInterceptor
+import com.snakydesign.watchtower.interceptor.WebSocketTowerObserver
 import kotlinx.coroutines.*
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
-import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
-import retrofit2.http.POST
 
 val websocketTowerObserver by lazy {
     WebSocketTowerObserver(

@@ -4,16 +4,11 @@ apply plugin: 'kotlin'
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':Core')
-    implementation project(':interceptor-retrofit')
 
     implementation libs.kotlin
-    implementation libs.retrofit
-    implementation libs.retrofitScalars
-    implementation libs.retrofitGson
-    implementation libs.okhttpLog
-    implementation libs.appcompatV7
-    implementation libs.coroutines
-
+    implementation libs.okhttp
+    implementation libs.nanoHTTPd
+    implementation libs.javaWS
     testImplementation libs.junit
     testImplementation libs.mockk
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"

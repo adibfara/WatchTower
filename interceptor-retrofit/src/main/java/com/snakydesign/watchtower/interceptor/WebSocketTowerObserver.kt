@@ -1,4 +1,4 @@
-package com.snakydesign.watchtower
+package com.snakydesign.watchtower.interceptor
 
 import com.snakydesign.watchtower.models.RequestData
 import com.snakydesign.watchtower.models.ResponseData
@@ -43,14 +43,23 @@ class WebSocketTowerObserver constructor(private val port: Int) : TowerObserver(
         if (!isStarted) {
             isStarted = true
             serverThread = Thread {
-                server = WatchTowerHTTPServer(port, html, cssFile, javascriptFile, jqueryFile)
+                server = WatchTowerHTTPServer(
+                    port,
+                    html,
+                    cssFile,
+                    javascriptFile,
+                    jqueryFile
+                )
                 server.start(3000, false)
             }.apply {
                 start()
             }
 
             websocketThread = Thread {
-                websocketServer = WatchTowerWebSocketServer(InetSocketAddress(5003), this@WebSocketTowerObserver)
+                websocketServer = WatchTowerWebSocketServer(
+                    InetSocketAddress(5003),
+                    this@WebSocketTowerObserver
+                )
                 websocketServer.start()
             }.apply {
                 start()
@@ -89,7 +98,11 @@ class WebSocketTowerObserver constructor(private val port: Int) : TowerObserver(
     override fun showResponse(responseReceived: ResponseData) {
         checkIfEngineStarted()
         allResponses.add(responseReceived)
-        sendMessage(WebSocketMessage.Response(responseReceived))
+        sendMessage(
+            WebSocketMessage.Response(
+                responseReceived
+            )
+        )
     }
 
     override fun showAllResponses(responseReceived: List<ResponseData>) {
@@ -99,7 +112,11 @@ class WebSocketTowerObserver constructor(private val port: Int) : TowerObserver(
 
     override fun onOpened(connection: WebSocket) {
         checkIfEngineStarted()
-        connection.send(WebSocketMessage.BatchResponse(allResponses).toJson())
+        connection.send(
+            WebSocketMessage.BatchResponse(
+                allResponses
+            ).toJson()
+        )
     }
 
     private fun sendMessage(message: WebSocketMessage) {

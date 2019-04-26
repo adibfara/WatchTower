@@ -1,1 +1,1 @@
-include  ':Core', ':JavaApp', ':java'
+include ':Core', ':JavaApp', ':java', ':interceptor-retrofit'
