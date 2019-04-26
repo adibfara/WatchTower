@@ -9,9 +9,11 @@ repositories {
 }
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "com.snakyapps.watchtower:core:0.9.0"
-    implementation "com.snakyapps.watchtower:interceptor-okhttp:0.9.0"
+//    implementation "com.snakyapps.watchtower:core:0.9.0"
+//    implementation "com.snakyapps.watchtower:interceptor-okhttp:0.9.0"
 
+    implementation project(":core")
+    implementation project(":interceptor-okhttp")
     implementation libs.kotlin
     implementation libs.retrofit
     implementation libs.retrofitScalars

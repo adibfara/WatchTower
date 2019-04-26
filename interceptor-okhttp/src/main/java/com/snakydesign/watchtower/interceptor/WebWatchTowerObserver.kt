@@ -6,11 +6,14 @@ import com.snakydesign.watchtower.models.TowerObserver
 import org.java_websocket.WebSocket
 import java.net.InetSocketAddress
 import java.nio.charset.Charset
+import java.net.InetAddress
+
+
 
 /**
  * @author Adib Faramarzi (adibfara@gmail.com)
  */
-class WebSocketTowerObserver constructor(private val port: Int) : TowerObserver(),
+class WebWatchTowerObserver constructor(private val port: Int) : TowerObserver(),
     WatchTowerWebSocketServer.MessageHandler {
 
 
@@ -58,9 +61,12 @@ class WebSocketTowerObserver constructor(private val port: Int) : TowerObserver(
             websocketThread = Thread {
                 websocketServer = WatchTowerWebSocketServer(
                     InetSocketAddress(5003),
-                    this@WebSocketTowerObserver
+                    this@WebWatchTowerObserver
                 )
                 websocketServer.start()
+                InetAddress.getLocalHost().apply {
+                    println("WatchTower started, listening on http://$hostAddress:$port/ ")
+                }
             }.apply {
                 start()
             }
@@ -74,9 +80,6 @@ class WebSocketTowerObserver constructor(private val port: Int) : TowerObserver(
         if (!isStarted) throw Exception("Engine is not started! use WebSocketEventReported.start() to start it.")
     }
 
-    fun blockForRequests() {
-        serverThread.join()
-    }
 
     @Synchronized
     override fun stop() {

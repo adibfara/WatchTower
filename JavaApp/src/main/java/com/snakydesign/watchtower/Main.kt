@@ -1,7 +1,7 @@
 package com.snakydesign.watchtower
 
 import com.snakydesign.watchtower.interceptor.WatchTowerInterceptor
-import com.snakydesign.watchtower.interceptor.WebSocketTowerObserver
+import com.snakydesign.watchtower.interceptor.WebWatchTowerObserver
 import kotlinx.coroutines.*
 import okhttp3.OkHttpClient
 import retrofit2.Call
@@ -12,7 +12,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 
 val websocketTowerObserver by lazy {
-    WebSocketTowerObserver(
+    WebWatchTowerObserver(
         8085
     )
 }
