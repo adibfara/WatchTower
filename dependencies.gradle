@@ -16,11 +16,12 @@ ext.versions = [
         okhttp             : '3.12.0',
         nanoHTTPd          : '2.2.0',
         javaWS             : '1.4.0',
-
+        bintray     : '1.8.4',
+        androidMaven: '2.1',
 
 ]
 ext.maven = [
-        groupId: 'com.snakyapps',
+        groupId: 'com.snakyapps.watchtower',
         version: '0.9.0'
 ]
 ext.gradlePlugins = [
@@ -28,7 +29,9 @@ ext.gradlePlugins = [
         android                : "com.android.tools.build:gradle:$versions.android",
         kotlinAndroidExtensions: "org.jetbrains.kotlin:kotlin-android-extensions:$versions.kotlin",
         kotlinSerialization    : "org.jetbrains.kotlin:kotlin-serialization:$versions.kotlin",
-        jfrog                  : "org.jfrog.buildinfo:build-info-extractor-gradle:$versions.jfrog"
+        jfrog                  : "org.jfrog.buildinfo:build-info-extractor-gradle:$versions.jfrog",
+        bintray        : "com.jfrog.bintray.gradle:gradle-bintray-plugin:$versions.bintray",
+        androidMaven   : "com.github.dcendents:android-maven-gradle-plugin:$versions.androidMaven",
 ]
 
 ext.libs = [

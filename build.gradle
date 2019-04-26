@@ -13,6 +13,8 @@ buildscript {
         classpath gradlePlugins.kotlinSerialization
         classpath gradlePlugins.kotlinAndroidExtensions
         classpath gradlePlugins.jfrog
+        classpath gradlePlugins.bintray
+        classpath gradlePlugins.androidMaven
     }
 }
 allprojects {
@@ -26,15 +28,3 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
-
-/*
-subprojects.each { subproject -> evaluationDependsOn(subproject.path)}
-
-task allJar(type: Jar, dependsOn: subprojects.assemble) {
-    baseName = 'your-base-name'
-    subprojects.each { subproject ->
-        from subproject.configurations.archives.allArtifacts.files.collect {
-            zipTree(it)
-        }
-    }
-}*/

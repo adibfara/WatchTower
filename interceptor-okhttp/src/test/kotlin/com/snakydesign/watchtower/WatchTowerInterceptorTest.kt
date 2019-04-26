@@ -1,10 +1,7 @@
 package com.snakydesign.watchtower
 
 import com.snakydesign.watchtower.interceptor.WatchTowerInterceptor
-import com.snakydesign.watchtower.models.ContentBody
-import com.snakydesign.watchtower.models.EmptyBody
-import com.snakydesign.watchtower.models.RequestData
-import com.snakydesign.watchtower.models.ResponseData
+import com.snakydesign.watchtower.models.*
 import io.mockk.clearMocks
 import io.mockk.spyk
 import io.mockk.verify
@@ -27,11 +24,11 @@ class WatchTowerInterceptorTest {
     lateinit var watchdogInterceptorTest: TestWatchTowerAPI
     lateinit var mockWebServer: MockWebServer
 
-    class TestEventLogger : WatchTower {
-        override fun logRequest(requestSent: RequestData, logLevel: WatchTowerInterceptor.LogLevel) {
+    class TestEventLogger : WatchTowerDataHandler {
+        override fun logRequest(requestSent: RequestData) {
         }
 
-        override fun logResponse(responseReceived: ResponseData, logLevel: WatchTowerInterceptor.LogLevel) {
+        override fun logResponse(responseReceived: ResponseData) {
         }
     }
 
@@ -72,12 +69,12 @@ class WatchTowerInterceptorTest {
                 assert(it.body is ContentBody)
                 assert((it.body as ContentBody).contentLength == requestContentContentLength)
                 assert((it.body as ContentBody).body == requestContent)
-            }, any())
+            })
             mockkEventLogger.logResponse(withArg {
                 assert(it.body is ContentBody)
                 assert((it.body as ContentBody).contentLength == testContentContentLength)
                 assert((it.body as ContentBody).body == responseContent)
-            }, any())
+            })
         }
     }
 
@@ -99,11 +96,11 @@ class WatchTowerInterceptorTest {
         verify {
             mockkEventLogger.logRequest(withArg {
                 assert(it.headers.first { it.key == "testableRequestHeader" }.value == requestHeader)
-            }, any())
+            })
             mockkEventLogger.logResponse(withArg {
                 assert(it.headers.first { it.key == "testableResponseHeader" }.value == responseHeader)
 
-            }, any())
+            })
         }
     }
 
@@ -127,11 +124,11 @@ class WatchTowerInterceptorTest {
         verify {
             mockkEventLogger.logRequest(withArg {
                 assert(!it.headers.any { it.key == "testableRequestHeader" })
-            }, any())
+            })
             mockkEventLogger.logResponse(withArg {
                 assert(!it.headers.any { it.key == "testableResponseHeader" })
 
-            }, any())
+            })
         }
     }
 
@@ -144,10 +141,11 @@ class WatchTowerInterceptorTest {
         verify {
             mockkEventLogger.logRequest(withArg {
                 assert(it.body is EmptyBody)
-            }, any())
+            })
             mockkEventLogger.logResponse(withArg {
-                assert(it.body is EmptyBody)
-            }, any())
+                print(it)
+                assertEquals(0, (it.body as ContentBody).contentLength)
+            })
         }
     }
 
@@ -161,7 +159,7 @@ class WatchTowerInterceptorTest {
         verify {
             mockkEventLogger.logRequest(withArg {
                 assertEquals(url.toString() + "test", it.url)
-            }, any())
+            })
         }
     }
 
@@ -172,7 +170,7 @@ class WatchTowerInterceptorTest {
         verify {
             mockkEventLogger.logRequest(withArg {
                 assertEquals("GET", it.method.toUpperCase())
-            }, any())
+            })
         }
         clearMocks(mockkEventLogger)
 
@@ -182,7 +180,7 @@ class WatchTowerInterceptorTest {
         verify {
             mockkEventLogger.logRequest(withArg {
                 assertEquals("DELETE", it.method.toUpperCase())
-            }, any())
+            })
         }
         clearMocks(mockkEventLogger)
 
@@ -192,7 +190,7 @@ class WatchTowerInterceptorTest {
         verify {
             mockkEventLogger.logRequest(withArg {
                 assertEquals("HEAD", it.method.toUpperCase())
-            }, any())
+            })
         }
         clearMocks(mockkEventLogger)
 
@@ -202,7 +200,7 @@ class WatchTowerInterceptorTest {
         verify {
             mockkEventLogger.logRequest(withArg {
                 assertEquals("POST", it.method.toUpperCase())
-            }, any())
+            })
         }
         clearMocks(mockkEventLogger)
 
@@ -212,7 +210,7 @@ class WatchTowerInterceptorTest {
         verify {
             mockkEventLogger.logRequest(withArg {
                 assertEquals("PUT", it.method.toUpperCase())
-            }, any())
+            })
         }
         clearMocks(mockkEventLogger)
 

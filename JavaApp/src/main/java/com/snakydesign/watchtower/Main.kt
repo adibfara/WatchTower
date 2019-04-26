@@ -57,7 +57,8 @@ fun main() {
             }
         }
         watchTower.start()
-        websocketTowerObserver.blockForRequests()
+        Thread.currentThread().join() //
+
         Unit
     }
 }

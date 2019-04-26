@@ -1,10 +1,16 @@
 apply plugin: 'java-library'
 apply plugin: 'kotlin'
 
+repositories {
+    mavenCentral()
+    maven {
+        url "https://dl.bintray.com/adibfara/WatchTower"
+    }
+}
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(':Core')
-    implementation project(':interceptor-retrofit')
+    implementation "com.snakyapps.watchtower:core:0.9.0"
+    implementation "com.snakyapps.watchtower:interceptor-okhttp:0.9.0"
 
     implementation libs.kotlin
     implementation libs.retrofit
@@ -16,23 +22,10 @@ dependencies {
 
     testImplementation libs.junit
     testImplementation libs.mockk
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 }
 
 sourceCompatibility = "7"
 targetCompatibility = "7"
-buildscript {
-    ext.kotlin_version = '1.3.21'
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    }
-}
-repositories {
-    mavenCentral()
-}
 compileKotlin {
     kotlinOptions {
         jvmTarget = "1.8"

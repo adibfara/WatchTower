@@ -2,26 +2,43 @@ apply plugin: "com.jfrog.artifactory"
 apply plugin: 'maven-publish'
 apply from: rootProject.file('dependencies.gradle')
 
-def artifactoryUrl = "https://artifactory.docker.webdooz.com/artifactory"
+if (project.rootProject.file('local.properties').exists()) {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    if(properties.getProperty("bintray.user")!=null){
+        apply plugin: 'com.jfrog.bintray'
+        apply plugin: 'com.github.dcendents.android-maven'
+        apply plugin: 'maven-publish'
 
-artifactory {
-  contextUrl = artifactoryUrl
-  //The base Artifactory URL if not overridden by the publisher/resolver
-  publish {
-    repository {
-      Properties prop = null
-      if (project.rootProject.file('local.properties').exists()) {
-        prop = new Properties()
-        prop.load(project.rootProject.file('local.properties').newDataInputStream())
-      }
-      repoKey = maven.version.endsWith('SNAPSHOT') ? 'tap30-snapshot' : 'tap30-release'
-      username = prop?.getProperty("artifactoryUser") ?: System.getenv('ARTIFACTORY_USERNAME')
-      password = prop?.getProperty("artifactoryPassword") ?: System.getenv('ARTIFACTORY_PASSWORD')
+        bintray {
+            println("starting bintray")
+            user = properties.getProperty("bintray.user")
+            key = properties.getProperty("bintray.apikey")
+            pkg {
+                repo = BINTRAY_REPO_NAME
+                name = POM_ARTIFACT_ID
+                desc = POM_DESCRIPTION
+                websiteUrl = POM_URL
+                issueTrackerUrl = POM_ISSUE_URL
+                vcsUrl = POM_SCM_URL
+                licenses = ["Apache-2.0"]
+                publish = true
+
+                publicDownloadNumbers = true
+                version {
+                    desc = POM_DESCRIPTION
+                    name = maven.version
+                }
+            }
+
+
+            publications = ['mavenJava']
+        }
     }
 
-    defaults {
-      publishArtifacts = true
-      publications('aar', 'jar')
-    }
-  }
+}
+
+
+task  releaseOnBintray(type: GradleBuild) {
+    tasks = ['assemble', 'generatePomFileForMavenJavaPublication', 'bintrayUpload']
 }
