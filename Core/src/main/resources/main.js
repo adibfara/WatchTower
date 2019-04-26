@@ -1,10 +1,7 @@
 //this file needs heavy refactoring!
-
 calls = [];
 HTMLElement = typeof (HTMLElement) != 'undefined' ? HTMLElement : Element;
-
-// SCROLL TO BOTTOM
-var out = document.getElementById("requests_container");
+last_id = 0;
 
 
 HTMLElement.prototype.prepend = function (element) {
@@ -14,47 +11,7 @@ HTMLElement.prototype.prepend = function (element) {
         return this.appendChild(element);
     }
 };
-last_id = 0;
 
-function addTestRequest(request) {
-    var text = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-    for (var i = 0; i < 8; i++)
-        text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-    testData = '{ ' +
-        '    "requestData": {' +
-        '    "url": "http://google.com/hello/' + text + '?adib=true&khiar=1",' +
-        '    "headers": [' +
-        '      {' +
-        '        "key": "khiar",' +
-        '        "value": "wtf"' +
-        '      },' +
-        '      {' +
-        '        "key": "khiar2",' +
-        '        "value": "wtf2"' +
-        '      }' +
-        '    ],' +
-        '    "method": "GET"' +
-        '  },' +
-        '  "headers": [' +
-        '    {' +
-        '      "key": "response header 1",' +
-        '      "value": "wtasdfsadff"' +
-        '    },' +
-        '    {' +
-        '      "key": "response header 2",' +
-        '      "value": "wtdsfasdff2"' +
-        '    }' +
-        '  ],' +
-        '  "tookTime": 47,' +
-        '  "responseCode": ' + (Math.random() >= 0.5 ? 500 : 200) + ',' +
-        '  "body": {"body" : "{\\"salam\\":true}"},' +
-        '  "contentLength": 3700' +
-        '}';
-    processRequest(JSON.parse(testData));
-}
 
 function processRequest(call) {
     if (call.requestData != null) {
@@ -64,13 +21,6 @@ function processRequest(call) {
         document.getElementById("requests_container").append(getRequestHTML(call));
         applySearch();
     }
-
-}
-
-function getJsonHtml(string) {
-    return htmlToElement(
-        '<pre><code class="json">' + string + '</code></pre>'
-    )
 }
 
 function htmlToElement(html) {
@@ -138,8 +88,8 @@ function setupClickHandlers() {
         call.headers.forEach(function (value) {
             $("#response_headers").append(createHighlightedRow(value['key'], value['value']))
         });
-        url = call.requestData.url
-        paramHTML = ""
+        url = call.requestData.url;
+        paramHTML = "";
         if (url.includes("?")) {
 
             params = url.substring(url.lastIndexOf('?'))
@@ -294,6 +244,46 @@ function applySearch() {
 
 /*
 only for testing purposes*/
+
+function addTestRequest(request) {
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for (var i = 0; i < 8; i++)
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    testData = '{ ' +
+        '    "requestData": {' +
+        '    "url": "http://google.com/hello/' + text + '?adib=true&khiar=1",' +
+        '    "headers": [' +
+        '      {' +
+        '        "key": "khiar",' +
+        '        "value": "wtf"' +
+        '      },' +
+        '      {' +
+        '        "key": "khiar2",' +
+        '        "value": "wtf2"' +
+        '      }' +
+        '    ],' +
+        '    "method": "GET"' +
+        '  },' +
+        '  "headers": [' +
+        '    {' +
+        '      "key": "response header 1",' +
+        '      "value": "wtasdfsadff"' +
+        '    },' +
+        '    {' +
+        '      "key": "response header 2",' +
+        '      "value": "wtdsfasdff2"' +
+        '    }' +
+        '  ],' +
+        '  "tookTime": 47,' +
+        '  "responseCode": ' + (Math.random() >= 0.5 ? 500 : 200) + ',' +
+        '  "body": {"body" : "{\\"salam\\":true}"},' +
+        '  "contentLength": 3700' +
+        '}';
+    processRequest(JSON.parse(testData));
+}
 addTestRequest("khiar");
 setInterval(function () {
     addTestRequest("khiar")

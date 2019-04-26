@@ -34,9 +34,7 @@ fun main() {
             .client(
                 OkHttpClient.Builder().addInterceptor(
                     interceptor
-                )/*.addInterceptor(HttpLoggingInterceptor().apply {
-                    setLevel(HttpLoggingInterceptor.Level.BODY)
-                } )*/
+                )
 
                     .build()
             )
