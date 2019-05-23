@@ -21,9 +21,6 @@ Setup
 #### OKHttp And Retrofit
 **Add the interceptor to your OKHttp Client**
 ```kotlin
-        val watchTower = WatchTower(WebSocketTowerObserver(8085))
-        val watchTowerInterceptor = WatchTowerInterceptor(watchTower)
-
         val retrofit = Retrofit.Builder()
                         .client(
                             OkHttpClient.Builder()
@@ -33,7 +30,7 @@ Setup
                         // ...
                 .build()
 
-        watchTower.start(WebWatchTowerObserver(port = 8085)) // in Application class
+        WatchTower.start(WebWatchTowerObserver(port = 8085)) // in Application class
 ```
 
 Note: you should call `watchTower.shutDown()` whenever your application is terminating to close the WatchTower service and its related thread.
@@ -45,6 +42,14 @@ After running your application, you can navigate to `http://yourip:8085/` and vi
 
 #### Features
 
+- Track and observe all API calls made through OKHttp's client
+- GET, POST, PUT, DELETE, PATCH methods
+- Query parameters, request and response body and headers
+- Response success and failure status, size, date and latency
+- Adjustable port for the server
+- API call history, even If no browsers were open
+- Search in the URLs of all requests
+- Fully responsive UI
 
 #### Notes
 PRs are more than welcome, and please file an issue If you encounter something 🍻.
