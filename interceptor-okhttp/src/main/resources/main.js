@@ -90,22 +90,25 @@ function setupClickHandlers() {
             $("#response_headers").append(createHighlightedRow(value['key'], value['value']))
         });
         url = call.requestData.url;
+        urlWithoutParams = url;
         paramHTML = "";
         if (url.includes("?")) {
 
-            params = url.substring(url.lastIndexOf('?'))
+            urlWithoutParams = url.substring(0, url.indexOf('?'));
+            params = url.substring(url.lastIndexOf('?'));
             urlParams = new URLSearchParams(params);
             urlParams.forEach(function (value, key) {
                 paramHTML += createHighlightedRow(key, value)
             })
         }
 
+        $("#request_url").html(urlWithoutParams);
         if (paramHTML.length > 1) {
             $("#request_params").html(paramHTML);
-            $("#request_params_container").show()
+            $("#params_title").show();
         } else {
-            $("#request_params_container").hide()
-
+            $("#request_params").html("");
+            $("#params_title").hide();
         }
         request_body = (call.requestData.body != null && call.requestData.body.body != null) ?
             formatBody(call.requestData.body.body)
