@@ -8,8 +8,8 @@ dependencies {
 
     implementation libs.kotlin
     implementation libs.okhttp
-    implementation libs.nanoHTTPd
-    implementation libs.javaWS
+    api libs.nanoHTTPd
+    api libs.javaWS
     testImplementation libs.junit
     testImplementation libs.mockk
     testImplementation libs.retrofit

@@ -1,6 +1,6 @@
 WatchDog - Observe OkHttp network and API calls right in your favorite browser!
 -------------------------------------------------------------------------------
-[![Build Status](https://travis-ci.org/adibfara/Watchtower.svg?branch=master)](https://travis-ci.org/adibfara/Lives) [![Latest Version](https://img.shields.io/bintray/v/adibfara/watchtower/watchtower.svg?label=version)](https://github.com/adibfara/WatchTower)
+[![Build Status](https://travis-ci.org/adibfara/Watchtower.svg?branch=master)](https://travis-ci.org/adibfara/Watchtower) [ ![Download](https://api.bintray.com/packages/adibfara/WatchTower/WatchTower/images/download.svg) ](https://bintray.com/adibfara/WatchTower/WatchTower/)
 
 ![Screenshot](https://raw.githubusercontent.com/adibfara/Watchtower/master/screenshots/screenshot-1.jpg "Watchtower Screenshot")
 
@@ -10,9 +10,9 @@ Download
 Add the dependencies to your project:
 
 ```groovy
-implementation 'com.snakydesign.watchdog:core:1.0.0'
-debugImplementation 'com.snakydesign.watchdog:interceptor-okhttp:1.0.0'
-releaseImplementation 'com.snakydesign.watchdog:interceptor-okhttp-no-op:1.0.0' //add no-op dependency for non-debug build variants
+implementation 'com.snakyapps.watchtower:core:1.0.0'
+debugImplementation 'com.snakyapps.watchtower:interceptor-okhttp:1.0.0'
+releaseImplementation 'com.snakyapps.watchtower:interceptor-okhttp-no-op:1.0.0' //add no-op dependency for non-debug build variants
 ```
 
 Setup

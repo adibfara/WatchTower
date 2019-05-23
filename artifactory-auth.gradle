@@ -6,7 +6,10 @@ if (System.getenv('ARTIFACTORY_USERNAME') != null) {
   artifactoryPassword = System.getenv('ARTIFACTORY_PASSWORD')
 } else {
   Properties properties = new Properties()
-  properties.load(project.rootProject.file('local.properties').newDataInputStream())
-  artifactoryUser = properties.getProperty('artifactoryUser')
-  artifactoryPassword = properties.getProperty('artifactoryPassword')
+  if(project.rootProject.file('local.properties').exists()){
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    artifactoryUser = properties.getProperty('artifactoryUser')
+    artifactoryPassword = properties.getProperty('artifactoryPassword')
+  }
+
 }
