@@ -1,16 +1,18 @@
-WatchDog - Monitor Network calls made in Android and Java right in your browser
+WatchDog - Observe OkHttp network and API calls right in your favorite browser!
 -------------------------------------------------------------------------------
-[![Build Status](https://travis-ci.org/adibfara/Lives.svg?branch=master)](https://travis-ci.org/adibfara/Lives) [![Latest Version](https://img.shields.io/bintray/v/adibfara/watchtower/watchtower.svg?label=version)](https://github.com/adibfara/WatchTower)
+[![Build Status](https://travis-ci.org/adibfara/Watchtower.svg?branch=master)](https://travis-ci.org/adibfara/Lives) [![Latest Version](https://img.shields.io/bintray/v/adibfara/watchtower/watchtower.svg?label=version)](https://github.com/adibfara/WatchTower)
 
-Observe Android and Java network calls, requests, responses right in your browser
+![Screenshot](https://github.com/adibfara/Watchtower/screenshots/screenshot-1.jpg "Watchtower Screenshot")
+
+
 Download
 --------
 Add the dependencies to your project:
 
 ```groovy
-implementation 'com.snakydesign.watchdog:core:0.9.0'
-debugImplementation 'com.snakydesign.watchdog:interceptor-okhttp:0.9.0'
-releaseImplementation 'com.snakydesign.watchdog:interceptor-okhttp-no-op:0.9.0' //add no-op dependency for non-debug build variants
+implementation 'com.snakydesign.watchdog:core:1.0.0'
+debugImplementation 'com.snakydesign.watchdog:interceptor-okhttp:1.0.0'
+releaseImplementation 'com.snakydesign.watchdog:interceptor-okhttp-no-op:1.0.0' //add no-op dependency for non-debug build variants
 ```
 
 Setup
@@ -19,26 +21,29 @@ Setup
 #### OKHttp And Retrofit
 **Add the interceptor to your OKHttp Client**
 ```kotlin
-        val watchTower = WatchTower(listOf(WebSocketTowerObserver(8085)))
+        val watchTower = WatchTower(WebSocketTowerObserver(8085))
         val watchTowerInterceptor = WatchTowerInterceptor(watchTower)
 
         val retrofit = Retrofit.Builder()
-                // ...
-                .client( // add the interceptor to your OKHttp client for Retrofit
-                        OkHttpClient.Builder()
-                                .addInterceptor(watchTowerInterceptor)
-                                .build()
-                )
+                        .client(
+                            OkHttpClient.Builder()
+                            .addInterceptor(WatchTowerInterceptor())
+                            .build()
+                        )
+                        // ...
                 .build()
 
-        watchTower.start()
+        watchTower.start(WebWatchTowerObserver(port = 8085)) // in Application class
 ```
 
-Note: you should call `watchTower.shutDown()` whenever your application is terminating to close the WatchTower service and its related thread. It's best to start and shut down the WatchTower inside an android service (using `onCreate` and `onDestroy` of an Android Service)
+Note: you should call `watchTower.shutDown()` whenever your application is terminating to close the WatchTower service and its related thread.
+If you're using it on Android, It's best to start and shut down the WatchTower inside an Android service (using `onCreate` and `onDestroy` of an Android Service)
 
 **Observing the events using your browser**
 Connect the device that is running the app to the same network that you want to observe the data first. So if you are on a WiFi, both devices should be connected to the same WiFi so they can communicate with each other.
 After running your application, you can navigate to `http://yourip:8085/` and view the network calls. If you don't know `yourip`, It will be printed out to the console with the message of `WatchTower started, listening on ... `.
+
+#### Features
 
 
 #### Notes

@@ -40,7 +40,8 @@ function getRequestHTML(response) {
     isSuccess = (responseCode >= 200 && responseCode < 300);
     classname = isSuccess ? 'success' : 'failure';
     success = isSuccess ? "SUCCESS" : "FAILED";
-    contentLength = parseInt(response.contentLength / 1000);
+    responseLength = parseInt(response.contentLength);
+    contentLength = responseLength > 1000 ? parseInt(response.contentLength / 1000) + " kilobytes" : responseLength + " bytes";
     return htmlToElement('<div class="animatable request card ' + classname + '" id="' + id + '">' +
         '                 <div class="url">' +
         '                     <h3>' + method + '</h3>' +
@@ -51,7 +52,7 @@ function getRequestHTML(response) {
         '                       <span class="length">' +
         '                           ' + success + ' ' + responseCode + '' +
         '                         </span><span class="response_length">' +
-        '                             <strong>' + contentLength + '</strong> Kilobytes' +
+        '                             <strong>' + contentLength + '</strong>' +
         '                         </span>' +
         '                     </div>' +
         '                     <div class="date-container">' +

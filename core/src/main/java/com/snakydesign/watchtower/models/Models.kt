@@ -145,15 +145,3 @@ abstract class TowerObserver {
 
     }
 }
-
-interface WatchTowerDataHandler {
-    /**
-     * dispatches a request to all WatchTower observers
-     */
-    fun logRequest(requestSent: RequestData)
-
-    /**
-     * dispatches a response to all WatchTower observers
-     */
-    fun logResponse(responseReceived: ResponseData)
-}

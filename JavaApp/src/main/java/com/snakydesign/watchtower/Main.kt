@@ -8,17 +8,15 @@ import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.POST
 
 val websocketTowerObserver by lazy {
     WebWatchTowerObserver(
         8085
     )
-}
-val watchTower by lazy {
-    WatchTower(listOf(websocketTowerObserver))
-
 }
 val testJob = SupervisorJob()
 val javaMainScope = CoroutineScope(Dispatchers.Main + testJob)
@@ -26,18 +24,12 @@ fun main() {
 
     runBlocking<Unit> {
 
-        val interceptor = WatchTowerInterceptor(
-            watchTower
-        )
         val retrofit = Retrofit.Builder()
             .client(
-                OkHttpClient.Builder().addInterceptor(
-                    interceptor
-                )
-
+                OkHttpClient.Builder().addInterceptor(WatchTowerInterceptor())
                     .build()
             )
-            .baseUrl("https://tap33.me/api/")
+            .baseUrl("https://reqres.in/api/")
             .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .build().create(TestAPI::class.java)
@@ -47,24 +39,29 @@ fun main() {
                 while (true) {
                     try {
                         val call =
-                            retrofit.getExample("of course").execute()
+                            retrofit.getExample(
+                                "of course", SampleRequestBody(
+                                    "test id", "TheSNAKY"
+                                )
+                            ).execute()
                         println(call.body() ?: " Empty response:\n" + call.message())
-                        delay(3000)
+
                     } catch (t: Throwable) {
                         t.printStackTrace()
+                    } finally {
+                        delay(3000)
                     }
                 }
             }
         }
-        watchTower.start()
-        Thread.currentThread().join() //
+        WatchTower.start(WebWatchTowerObserver(port = 8085))
+        Thread.currentThread().join()
 
-        Unit
     }
 }
 
 data class SampleRequestBody(val id: String, val name: String)
 interface TestAPI {
-    @GET("v2/init/passenger")
-    fun getExample(@Header("khiar") header: String): Call<String>
+    @POST("users")
+    fun getExample(@Header("test") header: String, @Body requestBody: SampleRequestBody): Call<String>
 }

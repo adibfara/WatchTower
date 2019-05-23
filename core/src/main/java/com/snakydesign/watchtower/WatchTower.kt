@@ -3,8 +3,8 @@ package com.snakydesign.watchtower
 import com.snakydesign.watchtower.models.RequestData
 import com.snakydesign.watchtower.models.ResponseData
 import com.snakydesign.watchtower.models.TowerObserver
-import com.snakydesign.watchtower.models.WatchTowerDataHandler
 import java.util.concurrent.ArrayBlockingQueue
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * @author Adib Faramarzi (adibfara@gmail.com)
@@ -13,22 +13,25 @@ import java.util.concurrent.ArrayBlockingQueue
  * @param observers: observers of the request and responses
  * @param numberOfCachedResponses: number of the responses to cache, to send to each observer that gets attached
  */
-class WatchTower(private val observers: List<TowerObserver>, private val numberOfCachedResponses: Int = 100) :
-    WatchTowerDataHandler {
-    private var isRunning: Boolean = true
+object WatchTower {
+
+    private var isStarted: AtomicBoolean = AtomicBoolean(false)
+    private var isActive = true
+    private var numberOfCachedResponses = 100
     private val latestResponses = ArrayBlockingQueue<ResponseData>(numberOfCachedResponses)
+    private lateinit var observers: List<TowerObserver>
     /**
      * returns the last responses received by the WatchTower service
      */
-    fun getLatestResponses(): List<ResponseData> {
+    internal fun getLatestResponses(): List<ResponseData> {
         return latestResponses.toList()
     }
 
     /**
      * dispatches a request to all WatchTower observers
      */
-    override fun logRequest(requestSent: RequestData) {
-        if (isRunning) {
+    fun logRequest(requestSent: RequestData) {
+        if (isStarted.get() && isActive) {
             observers.forEach {
                 it.logRequest(requestSent)
             }
@@ -38,8 +41,8 @@ class WatchTower(private val observers: List<TowerObserver>, private val numberO
     /**
      * dispatches a response to all WatchTower observers
      */
-    override fun logResponse(responseReceived: ResponseData) {
-        if (isRunning) {
+    fun logResponse(responseReceived: ResponseData) {
+        if (isStarted.get() && isActive) {
 
             observers.forEach {
                 it.logResponse(responseReceived)
@@ -52,34 +55,44 @@ class WatchTower(private val observers: List<TowerObserver>, private val numberO
      * pauses tracking events
      */
     fun pause() {
-        isRunning = false
+        isActive = false
     }
 
     /**
      * resumes a previously paused event tracking
      */
     fun resume() {
-        isRunning = true
+        isActive = true
     }
 
     /**
      * shuts down the WatchTower and all observers
      */
     fun shutDown() {
-        isRunning = false
-        observers.forEach {
-            it.shutDown()
+        if (isStarted.get()) {
+            isStarted.set(false)
+            observers.forEach {
+                it.shutDown()
+            }
+        } else {
+            System.err.println("Watch tower `shutDown` called when it has not started.")
         }
     }
 
     /**
      * starts WatchTower and all observers
      */
-    fun start() {
-        isRunning = true
-        observers.forEach {
-            it.start()
-            it.showAllResponses(getLatestResponses())
+    fun start(vararg observers: TowerObserver, numberOfCachedResponses: Int = 100) {
+        if (!isStarted.get()) {
+            this.numberOfCachedResponses = numberOfCachedResponses
+            this.observers = observers.toList()
+            isStarted.set(true)
+            observers.forEach {
+                it.start()
+                it.showAllResponses(getLatestResponses())
+            }
+        } else {
+            System.err.println("Watch tower `start` called when it is already started.")
         }
     }
 }
