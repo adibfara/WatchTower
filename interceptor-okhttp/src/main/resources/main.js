@@ -67,22 +67,24 @@ function getRequestHTML(response) {
         '             </div>')
 }
 
-
 function setupClickHandlers() {
     $(document).on('click', '.request', function (element) {
+        var clickedId = (this.id);
+
+
+        call = calls.find(function (value) {
+            return parseInt(value['callId']) === parseInt(clickedId)
+        });
+        if (call === undefined)
+            return;
         $(".request").removeClass("active");
         $(".selected-card").html($(this).clone().prop('id', 'selected_active_card')).off("click").off('mouseenter mouseleave').off('hover').unbind();
-        var clickedId = (this.id);
-        console.log(clickedId);
+
         $("#request_headers").html("");
         $("#response_headers").html("");
         $("#request_data").html("");
         $("#response_data").html("");
         $(".data-container ").show();
-        call = calls.find(function (value) {
-            return parseInt(value['callId']) === parseInt(clickedId)
-        });
-        console.log(call);
         call.requestData.headers.forEach(function (value) {
             $("#request_headers").append(createHighlightedRow(value['key'], value['value']))
         });
