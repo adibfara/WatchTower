@@ -2,7 +2,7 @@ WatchDog - Observe OkHttp network and API calls right in your favorite browser!
 -------------------------------------------------------------------------------
 [![Build Status](https://travis-ci.org/adibfara/Watchtower.svg?branch=master)](https://travis-ci.org/adibfara/Lives) [![Latest Version](https://img.shields.io/bintray/v/adibfara/watchtower/watchtower.svg?label=version)](https://github.com/adibfara/WatchTower)
 
-![Screenshot](https://github.com/adibfara/Watchtower/screenshots/screenshot-1.jpg "Watchtower Screenshot")
+![Screenshot](https://raw.githubusercontent.com/adibfara/Watchtower/master/screenshots/screenshot-1.jpg "Watchtower Screenshot")
 
 
 Download
