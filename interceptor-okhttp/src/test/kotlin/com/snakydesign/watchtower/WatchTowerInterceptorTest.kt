@@ -19,7 +19,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
  * @author Adib Faramarzi (adibfara@gmail.com)
  */
 class WatchTowerInterceptorTest {
-    lateinit var watchdogInterceptorTest: TestWatchTowerAPI
+    lateinit var watchTowerInterceptorTest: TestWatchTowerAPI
     lateinit var mockWebServer: MockWebServer
 
     lateinit var mockObserver: TowerObserver
@@ -34,7 +34,7 @@ class WatchTowerInterceptorTest {
 //        mockkObject(WatchTower)
         mockWebServer = MockWebServer()
         url = mockWebServer.url("/")
-        watchdogInterceptorTest = Retrofit.Builder()
+        watchTowerInterceptorTest = Retrofit.Builder()
             .baseUrl(url)
             .client(
                 OkHttpClient.Builder()
@@ -55,7 +55,7 @@ class WatchTowerInterceptorTest {
         val responseContent = "hello, world!"
 
         mockWebServer.enqueue(MockResponse().setBody(responseContent))
-        val response = watchdogInterceptorTest.testPostFunction(requestContent)
+        val response = watchTowerInterceptorTest.testPostFunction(requestContent)
 
         response.execute()
 
@@ -74,7 +74,7 @@ class WatchTowerInterceptorTest {
         WatchTower.resume()
 
         mockWebServer.enqueue(MockResponse().setBody(responseContent))
-        val response2 = watchdogInterceptorTest.testPostFunction(requestContent)
+        val response2 = watchTowerInterceptorTest.testPostFunction(requestContent)
 
         response2.execute()
 
@@ -100,7 +100,7 @@ class WatchTowerInterceptorTest {
                 responseHeader
             )
         )
-        val response = watchdogInterceptorTest.testPostHeaderFunction(requestHeader, requestContent)
+        val response = watchTowerInterceptorTest.testPostHeaderFunction(requestHeader, requestContent)
 
         response.execute()
         verify {
@@ -118,7 +118,7 @@ class WatchTowerInterceptorTest {
     fun `test empty request and response`() {
         WatchTower.start(mockObserver)
         mockWebServer.enqueue(MockResponse())
-        val response = watchdogInterceptorTest.testGetFunction()
+        val response = watchTowerInterceptorTest.testGetFunction()
 
         response.execute()
         verify {
@@ -140,7 +140,7 @@ class WatchTowerInterceptorTest {
         val requestContentContentLength: Long = requestContent.byteInputStream().available().toLong()
         val testContentContentLength: Long = responseContent.byteInputStream().available().toLong()
         mockWebServer.enqueue(MockResponse().setBody(responseContent))
-        val response = watchdogInterceptorTest.testPostFunction(requestContent)
+        val response = watchTowerInterceptorTest.testPostFunction(requestContent)
 
         response.execute()
         verify {
@@ -173,7 +173,7 @@ class WatchTowerInterceptorTest {
                 responseHeader
             )
         )
-        val response = watchdogInterceptorTest.testPostHeaderFunction(requestHeader, requestContent)
+        val response = watchTowerInterceptorTest.testPostHeaderFunction(requestHeader, requestContent)
 
         response.execute()
         verify {
@@ -192,7 +192,7 @@ class WatchTowerInterceptorTest {
     fun `test request url`() {
         WatchTower.start(mockObserver)
         mockWebServer.enqueue(MockResponse())
-        val response = watchdogInterceptorTest.testGetFunction()
+        val response = watchTowerInterceptorTest.testGetFunction()
 
         response.execute()
 
@@ -207,7 +207,7 @@ class WatchTowerInterceptorTest {
     fun `test GET, POST, DELETE, PUT, HEAD types `() {
         WatchTower.start(mockObserver)
         mockWebServer.enqueue(MockResponse())
-        watchdogInterceptorTest.testGetFunction().execute()
+        watchTowerInterceptorTest.testGetFunction().execute()
         verifyOrder {
             mockObserver.logRequest(withArg {
                 assertEquals("GET", it.method.toUpperCase())
@@ -217,7 +217,7 @@ class WatchTowerInterceptorTest {
 
         clearMocks(mockObserver)
         mockWebServer.enqueue(MockResponse())
-        watchdogInterceptorTest.testDeleteFunction().execute()
+        watchTowerInterceptorTest.testDeleteFunction().execute()
 
 
 
@@ -230,7 +230,7 @@ class WatchTowerInterceptorTest {
 
         clearMocks(mockObserver)
         mockWebServer.enqueue(MockResponse())
-        watchdogInterceptorTest.testHeadFunction().execute()
+        watchTowerInterceptorTest.testHeadFunction().execute()
 
         verify {
             mockObserver.logRequest(withArg {
@@ -241,7 +241,7 @@ class WatchTowerInterceptorTest {
 
         clearMocks(mockObserver)
         mockWebServer.enqueue(MockResponse())
-        watchdogInterceptorTest.testPostFunction("").execute()
+        watchTowerInterceptorTest.testPostFunction("").execute()
 
         verify {
             mockObserver.logRequest(withArg {
@@ -252,7 +252,7 @@ class WatchTowerInterceptorTest {
 
         clearMocks(mockObserver)
         mockWebServer.enqueue(MockResponse())
-        watchdogInterceptorTest.testPutFunction().execute()
+        watchTowerInterceptorTest.testPutFunction().execute()
 
         verify {
             mockObserver.logRequest(withArg {

@@ -55,7 +55,7 @@ publishing {
             version = maven.version
             artifactId "interceptor-okhttp"
             pom {
-                name =  "WatchDog OKHTTP Interceptor"
+                name =  "WatchTower OKHTTP Interceptor"
                 description = "An OkHttp Interceptor for WatchTower"
                 url = POM_URL
             }

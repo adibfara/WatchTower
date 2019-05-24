@@ -1,5 +1,5 @@
-WatchDog - Observe OkHttp API calls right in your browser!
-----------------------------------------------------------
+WatchTower - Observe OKHttp API Calls With Request And Response Details Right In Your Browser!
+----------------------------------------------------------------------------------------------
 [![Build Status](https://travis-ci.org/adibfara/Watchtower.svg?branch=master)](https://travis-ci.org/adibfara/Watchtower) [ ![Download](https://api.bintray.com/packages/adibfara/WatchTower/WatchTower/images/download.svg) ](https://bintray.com/adibfara/WatchTower/WatchTower/)
 
 ![Screenshot](https://raw.githubusercontent.com/adibfara/Watchtower/master/screenshots/screenshot-1.jpg "Watchtower Screenshot")
