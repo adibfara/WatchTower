@@ -114,13 +114,13 @@ abstract class TowerObserver {
             }
         }
 
-    internal fun logRequest(requestSent: RequestData) {
+    fun logRequest(requestSent: RequestData) {
         if (_isEnabled) {
             showRequest(requestSent)
         }
     }
 
-    internal fun logResponse(responseReceived: ResponseData) {
+    fun logResponse(responseReceived: ResponseData) {
         if (_isEnabled) {
             showResponse(responseReceived)
         }

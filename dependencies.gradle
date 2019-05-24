@@ -10,7 +10,7 @@ ext.versions = [
         support            : '27.1.0',
         junit              : '4.12',
         android            : '3.3.0',
-        mockk              : '1.8.13.kotlin13',
+        mockk              : '1.9.3',
         jfrog              : '4.7.5',
         retrofit           : '2.5.0',
         okhttp             : '3.12.0',

@@ -83,6 +83,7 @@ object WatchTower {
      * starts WatchTower and all observers
      */
     fun start(vararg observers: TowerObserver, numberOfCachedResponses: Int = 100) {
+        isActive = true
         if (!isStarted.get()) {
             this.numberOfCachedResponses = numberOfCachedResponses
             this.observers = observers.toList()
