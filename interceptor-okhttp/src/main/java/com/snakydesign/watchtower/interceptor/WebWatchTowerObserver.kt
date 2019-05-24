@@ -13,7 +13,7 @@ import java.net.InetAddress
 /**
  * @author Adib Faramarzi (adibfara@gmail.com)
  */
-class WebWatchTowerObserver constructor(private val port: Int) : TowerObserver(),
+class WebWatchTowerObserver constructor(private val port: Int, private val websocketPort: Int = 5003) : TowerObserver(),
     WatchTowerWebSocketServer.MessageHandler {
 
 
@@ -60,7 +60,7 @@ class WebWatchTowerObserver constructor(private val port: Int) : TowerObserver()
 
             websocketThread = Thread {
                 websocketServer = WatchTowerWebSocketServer(
-                    InetSocketAddress(5003),
+                    InetSocketAddress(websocketPort),
                     this@WebWatchTowerObserver
                 )
                 websocketServer.start()

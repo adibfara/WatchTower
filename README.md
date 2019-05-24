@@ -12,7 +12,7 @@ Add the dependencies to your project:
 ```groovy
 implementation 'com.snakyapps.watchtower:core:1.0.0'
 debugImplementation 'com.snakyapps.watchtower:interceptor-okhttp:1.0.0'
-releaseImplementation 'com.snakyapps.watchtower:interceptor-okhttp-no-op:1.0.0' //add no-op dependency for non-debug build variants
+releaseImplementation 'com.snakyapps.watchtower:interceptor-okhttp-no-op:1.0.0' // no-op dependency for non-debug build variants
 ```
 
 Setup
@@ -33,23 +33,27 @@ Setup
         WatchTower.start(WebWatchTowerObserver(port = 8085)) // in Application class
 ```
 
-Note: you should call `watchTower.shutDown()` whenever your application is terminating to close the WatchTower service and its related thread.
+Note: you should call `watchTower.shutDown()` whenever your application/activity is terminating, which shuts down WatchTower-related services.
 If you're using it on Android, It's best to start and shut down the WatchTower inside an Android service (using `onCreate` and `onDestroy` of an Android Service)
 
-**Observing the events using your browser**
-Connect the device that is running the app to the same network that you want to observe the data first. So if you are on a WiFi, both devices should be connected to the same WiFi so they can communicate with each other.
-After running your application, you can navigate to `http://yourip:8085/` and view the network calls. If you don't know `yourip`, It will be printed out to the console with the message of `WatchTower started, listening on ... `.
-
-#### Features
+Features
+--------
+![Video](https://raw.githubusercontent.com/adibfara/Watchtower/master/screenshots/video.gif "Watchtower Video")
 
 - Track and observe all API calls made through OKHttp's client
 - GET, POST, PUT, DELETE, PATCH methods
 - Query parameters, request and response body and headers
 - Response success and failure status, size, date and latency
-- Adjustable port for the server
+- Adjustable port for the server and the websocket server
 - API call history, even If no browsers were open
 - Search in the URLs of all requests
 - Fully responsive UI
+- Fully extensible
+
+
+**Observing the events using your browser**
+Connect the device that is running the app to the same network that you want to observe the data. If you are on a WiFi, both devices should be connected to the same WiFi so they can communicate with each other.
+After running your application, you can navigate to `http://yourip:8085/` and view the network calls. If you don't know what `yourip` is, It will be printed out to the console with the message of `WatchTower started, listening on ... ` when `Watchtower.start()` is called.
 
 #### Notes
 PRs are more than welcome, and please file an issue If you encounter something 🍻.

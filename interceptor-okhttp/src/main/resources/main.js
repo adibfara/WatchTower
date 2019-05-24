@@ -41,6 +41,7 @@ function getRequestHTML(response) {
     classname = isSuccess ? 'success' : 'failure';
     success = isSuccess ? "SUCCESS" : "FAILED";
     responseLength = parseInt(response.contentLength);
+    if (responseLength === undefined || responseLength < 0) responseLength = 0;
     contentLength = responseLength > 1000 ? parseInt(response.contentLength / 1000) + " kilobytes" : responseLength + " bytes";
     return htmlToElement('<div class="animatable request card ' + classname + '" id="' + id + '">' +
         '                 <div class="url">' +
@@ -189,7 +190,7 @@ function connectToWebSocket() {
     if ("WebSocket" in window) {
 
         var wesocketAddress = "ws://" + location.hostname + ":5003/";
-        console.log(wesocketAddress);
+
         // Let us open a web socket
         var ws = new WebSocket(wesocketAddress);
 
@@ -197,7 +198,7 @@ function connectToWebSocket() {
 
             // Web Socket is connected, send data using send()
             ws.send('{"connected": true}');
-            console.log("Message is sent...");
+
         };
 
         ws.onmessage = function (evt) {
@@ -218,7 +219,7 @@ function connectToWebSocket() {
         ws.onclose = function () {
 
             // websocket is closed.
-            console.log("Connection is closed...");
+
         };
     } else {
 
@@ -238,7 +239,7 @@ $("#url_search").on('keyup', function () {
 });
 
 function applySearch() {
-    console.log('searching');
+
     var value = $("#url_search").val().toLowerCase();
     $(".card").each(function () {
         if ($(this).find(".url h2").text().toLowerCase().search(value) > -1) {

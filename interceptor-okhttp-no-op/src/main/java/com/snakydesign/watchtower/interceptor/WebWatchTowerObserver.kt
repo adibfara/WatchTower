@@ -7,7 +7,7 @@ import com.snakydesign.watchtower.models.TowerObserver
 /**
  * @author Adib Faramarzi (adibfara@gmail.com)
  */
-class WebWatchTowerObserver(port: Int) : TowerObserver() {
+class WebWatchTowerObserver(port: Int = 0, websocketPort: Int = 5003) : TowerObserver() {
 
     override fun showRequest(requestSent: RequestData) {
 

@@ -12,6 +12,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import java.util.*
 
 val websocketTowerObserver by lazy {
     WebWatchTowerObserver(
@@ -29,7 +30,7 @@ fun main() {
                 OkHttpClient.Builder().addInterceptor(WatchTowerInterceptor())
                     .build()
             )
-            .baseUrl("https://reqres.in/api/")
+            .baseUrl("https://reqres.in/")
             .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .build().create(TestAPI::class.java)
@@ -38,12 +39,16 @@ fun main() {
             withContext(Dispatchers.IO) {
                 while (true) {
                     try {
-                        val call =
+                        val call = if (Random().nextBoolean()) {
+
                             retrofit.getExample(
                                 "of course", SampleRequestBody(
                                     "test id", "TheSNAKY"
                                 )
                             ).execute()
+                        } else {
+                            retrofit.getAnotherExample().execute()
+                        }
                         println(call.body() ?: " Empty response:\n" + call.message())
 
                     } catch (t: Throwable) {
@@ -62,6 +67,9 @@ fun main() {
 
 data class SampleRequestBody(val id: String, val name: String)
 interface TestAPI {
-    @POST("users")
+    @POST("api/users")
     fun getExample(@Header("test") header: String, @Body requestBody: SampleRequestBody): Call<String>
+
+    @GET("404URL")
+    fun getAnotherExample(): Call<String>
 }
