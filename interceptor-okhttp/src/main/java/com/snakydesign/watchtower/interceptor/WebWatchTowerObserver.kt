@@ -130,9 +130,11 @@ class WebWatchTowerObserver constructor(private val port: Int, private val webso
         super.shutDown()
         try {
             server.stop()
+        } catch (e: Throwable) {
+        }
+        try {
             websocketServer.stop()
         } catch (e: Throwable) {
-            e.printStackTrace()
         }
 
 
