@@ -17,8 +17,6 @@ releaseImplementation 'com.snakyapps.watchtower:interceptor-okhttp-no-op:1.0.0' 
 
 Setup
 -----
-
-#### OKHttp And Retrofit
 **Add the interceptor to your OKHttp Client**
 ```kotlin
         val retrofit = Retrofit.Builder()
