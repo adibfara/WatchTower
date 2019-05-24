@@ -62,7 +62,7 @@ You can also ping me on twitter [@TheSNAKY](http://twitter.com/TheSNAKY).
 License
 =======
 
-    Copyright 2018 Adib Faramarzi.
+    Copyright 2019 Adib Faramarzi.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
