@@ -10,7 +10,6 @@ Download
 Add the dependencies to your project:
 
 ```groovy
-implementation 'com.snakyapps.watchtower:core:1.0.0'
 debugImplementation 'com.snakyapps.watchtower:interceptor-okhttp:1.0.0'
 releaseImplementation 'com.snakyapps.watchtower:interceptor-okhttp-no-op:1.0.0' // no-op dependency for non-debug build variants
 ```
