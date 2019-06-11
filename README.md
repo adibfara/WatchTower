@@ -53,6 +53,9 @@ Features
 Connect the device that is running the app to the same network that you want to observe the data. If you are on a WiFi, both devices should be connected to the same WiFi so they can communicate with each other.
 After running your application, you can navigate to `http://yourip:8085/` and view the network calls. If you don't know what `yourip` is, It will be printed out to the console with the message of `WatchTower started, listening on ... `  when `Watchtower.start()` is called.
 
+**Observing emulator events in your computers browser**
+If your running watch tower in an emulator you need to forward socket connections from the emulator to your local computer. For example if WatchTower is running on port `8085` you would need to run `adb forward tcp:8085 tcp:8085` to be able to access the emulators webserver from your computer.
+
 #### Notes
 PRs are more than welcome, and please file an issue If you encounter something 🍻.
 
