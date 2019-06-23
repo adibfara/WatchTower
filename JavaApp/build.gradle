@@ -10,8 +10,7 @@ repositories {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation project(":core")
-    implementation project(":interceptor-okhttp")
+    implementation project(":interceptor-okhttp-no-op")
     implementation libs.kotlin
     implementation libs.retrofit
     implementation libs.retrofitScalars
