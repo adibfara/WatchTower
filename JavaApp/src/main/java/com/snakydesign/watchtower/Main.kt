@@ -21,19 +21,21 @@ val websocketTowerObserver by lazy {
 }
 val testJob = SupervisorJob()
 val javaMainScope = CoroutineScope(Dispatchers.Main + testJob)
+val retrofit = Retrofit.Builder()
+    .client(
+        OkHttpClient.Builder().addInterceptor(WatchTowerInterceptor())
+            .build()
+    )
+    .baseUrl("https://reqres.in/")
+    .addConverterFactory(ScalarsConverterFactory.create())
+    .addConverterFactory(GsonConverterFactory.create())
+    .build().create(TestAPI::class.java)
+
 fun main() {
 
     runBlocking<Unit> {
 
-        val retrofit = Retrofit.Builder()
-            .client(
-                OkHttpClient.Builder().addInterceptor(WatchTowerInterceptor())
-                    .build()
-            )
-            .baseUrl("https://reqres.in/")
-            .addConverterFactory(ScalarsConverterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create())
-            .build().create(TestAPI::class.java)
+
 
         javaMainScope.launch(Dispatchers.IO + testJob) {
             withContext(Dispatchers.IO) {
@@ -59,7 +61,7 @@ fun main() {
                 }
             }
         }
-        WatchTower.start(WebWatchTowerObserver(port = 8085))
+        WatchTower.start(WebWatchTowerObserver(port = 8085, websocketPort = 12000))
         Thread.currentThread().join()
 
     }

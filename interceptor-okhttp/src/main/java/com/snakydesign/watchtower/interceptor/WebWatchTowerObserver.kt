@@ -3,6 +3,7 @@ package com.snakydesign.watchtower.interceptor
 import com.snakydesign.watchtower.models.RequestData
 import com.snakydesign.watchtower.models.ResponseData
 import com.snakydesign.watchtower.models.TowerObserver
+import com.snakydesign.watchtower.models.WatchTowerServerConfig
 import org.java_websocket.WebSocket
 import java.net.InetSocketAddress
 import java.nio.charset.Charset
@@ -47,7 +48,7 @@ class WebWatchTowerObserver constructor(private val port: Int, private val webso
             isStarted = true
             serverThread = Thread {
                 server = WatchTowerHTTPServer(
-                    port,
+                    WatchTowerServerConfig(port, websocketPort),
                     html,
                     cssFile,
                     javascriptFile,

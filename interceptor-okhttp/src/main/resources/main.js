@@ -184,12 +184,21 @@ function getCurrentTime() {
 /**
  WEBSOCKET
  **/
+websocketAddress = undefined;
 
 function connectToWebSocket() {
-
+    if (websocketAddress === undefined) {
+        $.get("config", function (data) {
+            data = JSON.parse(data);
+            websocketAddress = data['webSocketPort'];
+            connectToWebSocket()
+        });
+        return
+    }
     if ("WebSocket" in window) {
 
-        var wesocketAddress = "ws://" + location.hostname + ":5003/";
+
+        var wesocketAddress = "ws://" + location.hostname + ":" + websocketAddress + "/";
 
         // Let us open a web socket
         var ws = new WebSocket(wesocketAddress);
@@ -219,6 +228,7 @@ function connectToWebSocket() {
         ws.onclose = function () {
 
             // websocket is closed.
+            setTimeout(connectToWebSocket(), 3000)
 
         };
     } else {

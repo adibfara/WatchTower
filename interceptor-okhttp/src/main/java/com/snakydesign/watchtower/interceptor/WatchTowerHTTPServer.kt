@@ -1,17 +1,18 @@
 package com.snakydesign.watchtower.interceptor
 
+import com.snakydesign.watchtower.models.WatchTowerServerConfig
 import fi.iki.elonen.NanoHTTPD
 
 /**
  * @author Adib Faramarzi (adibfara@gmail.com)
  */
 internal class WatchTowerHTTPServer(
-    port: Int,
+    private val watchTowerServerConfig: WatchTowerServerConfig,
     html: String,
     cssFile: String,
     javascriptFile: String,
     jqueryFile: String
-) : NanoHTTPD(port) {
+) : NanoHTTPD(watchTowerServerConfig.serverPort) {
     private val htmls = mapOf(
         "/" to html
     )
@@ -23,18 +24,26 @@ internal class WatchTowerHTTPServer(
 
     override fun serve(session: IHTTPSession?): Response {
         session?.let { session ->
-            htmls.get(session.uri)?.let {
-                return newFixedLengthResponse(it)
-            } ?: run {
-                files[session.uri]?.let {
-                    return newFixedLengthResponse(
-                        fi.iki.elonen.NanoHTTPD.Response.Status.OK,
-                        it.second,
-                        it.first
-                    )
+            if (session.uri.endsWith("config")) {
+                return newFixedLengthResponse(
+                    fi.iki.elonen.NanoHTTPD.Response.Status.OK,
+                    "application/javascript",
+                    watchTowerServerConfig.toJson()
+                )
+            } else {
+                htmls.get(session.uri)?.let {
+                    return newFixedLengthResponse(it)
+                } ?: run {
+                    files[session.uri]?.let {
+                        return newFixedLengthResponse(
+                            fi.iki.elonen.NanoHTTPD.Response.Status.OK,
+                            it.second,
+                            it.first
+                        )
+                    }
                 }
             }
-            println(session)
+
         }
 
         return super.serve(session)
