@@ -145,3 +145,9 @@ abstract class TowerObserver {
 
     }
 }
+
+data class WatchTowerServerConfig(val serverPort: Int, val webSocketPort: Int) {
+    fun toJson(): String {
+        return "{\n  \"serverPort\": $serverPort,\n  \"webSocketPort\": $webSocketPort\n}"
+    }
+}
