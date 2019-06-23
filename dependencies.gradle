@@ -5,7 +5,7 @@ ext.versions = [
         buildTools         : '28.0.2',
         coroutines         : '1.0.0',
 
-        kotlin             : '1.3.11',
+        kotlin             : '1.3.40',
         androidSdk         : '4.1.1.4',
         support            : '27.1.0',
         junit              : '4.12',

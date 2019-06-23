@@ -448,6 +448,7 @@ li .description {
     font-size: 12px;
     color: #c0c5ce;
 }
+
 .meta {
     margin-top: 20px;
 }
@@ -490,6 +491,7 @@ li .description {
     font-weight: bold;
     font-size: 14px;
 }
+
 .meta .date {
 
 
@@ -592,8 +594,15 @@ h1 + p {
     background: #2b303b;
     color: white;
     padding: 20px;
+    overflow-x: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
+.tab-container ::-webkit-scrollbar {
+    display: none;
+/ / Safari and Chrome
+}
 .clearfix:after {
     content: "";
     display: table;
@@ -632,8 +641,26 @@ Query Params
     border-bottom: 1px solid rgba(0, 0, 0, 0.41);
     margin: -20px -20px 10px -20px;
     padding: 20px;
+    overflow: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
+.hljs {
+    overflow: auto !important;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.hljs::-webkit-scrollbar {
+    display: none;
+/ / Safari and Chrome
+}
+
+#request_params_container ::-webkit-scrollbar {
+    display: none;
+/ / Safari and Chrome
+}
 #params_title {
     font-size: 16px;
     font-weight: bold;
@@ -670,6 +697,7 @@ Search Box
     background-color: #FFF;
 }
 
+
 /**
 Detail view
  */
@@ -682,6 +710,7 @@ Detail view
     padding: 0 10px;
     display: none;
 }
+
 .previous {
     background-color: #f1f1f1;
     color: black;
