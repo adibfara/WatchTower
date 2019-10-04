@@ -6,6 +6,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     api project(':core')
     implementation libs.okhttp
+    implementation libs.kotlin
 }
 
 sourceCompatibility = "7"
