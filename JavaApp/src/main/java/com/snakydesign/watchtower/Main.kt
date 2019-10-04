@@ -38,24 +38,27 @@ fun main() {
         javaMainScope.launch(Dispatchers.IO + testJob) {
             withContext(Dispatchers.IO) {
                 while (true) {
-                    try {
-                        val call = if (true) {
+                    launch {
+                        try {
+                            val call = if (true) {
 
-                            retrofit.getExample(
-                                "of course", SampleRequestBody(
-                                    "test id", "TheSNAKY"
-                                )
-                            ).execute()
-                        } else {
-                            retrofit.getAnotherExample().execute()
+                                retrofit.getExample(
+                                    "of course", SampleRequestBody(
+                                        "test id", "TheSNAKY"
+                                    )
+                                ).execute()
+                            } else {
+                                retrofit.getAnotherExample().execute()
+                            }
+                            println(call.body() ?: " Empty response:\n" + call.message())
+
+                        } catch (t: Throwable) {
+                            t.printStackTrace()
+                        } finally {
                         }
-                        println(call.body() ?: " Empty response:\n" + call.message())
-
-                    } catch (t: Throwable) {
-                        t.printStackTrace()
-                    } finally {
-                        delay(3000)
                     }
+                    delay(200)
+
                 }
             }
         }

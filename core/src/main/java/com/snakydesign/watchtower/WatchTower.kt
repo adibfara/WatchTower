@@ -4,6 +4,7 @@ import com.snakydesign.watchtower.models.RequestData
 import com.snakydesign.watchtower.models.ResponseData
 import com.snakydesign.watchtower.models.TowerObserver
 import java.util.concurrent.ArrayBlockingQueue
+import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
@@ -18,7 +19,7 @@ object WatchTower {
     private var isStarted: AtomicBoolean = AtomicBoolean(false)
     private var isActive = true
     private var numberOfCachedResponses = 100
-    private val latestResponses = ArrayBlockingQueue<ResponseData>(numberOfCachedResponses)
+    private val latestResponses = CopyOnWriteArrayList<ResponseData>()
     private lateinit var observers: List<TowerObserver>
     /**
      * returns the last responses received by the WatchTower service
@@ -47,7 +48,10 @@ object WatchTower {
             observers.forEach {
                 it.logResponse(responseReceived)
             }
-            latestResponses.put(responseReceived)
+
+            latestResponses.add(0, responseReceived)
+            if (latestResponses.size >= numberOfCachedResponses)
+                latestResponses.removeAt(numberOfCachedResponses - 1)
         }
     }
 
