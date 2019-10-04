@@ -4,7 +4,7 @@ apply from: rootProject.file('artifactory.gradle')
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(':core')
+    api project(':core')
 
     implementation libs.kotlin
     implementation libs.okhttp

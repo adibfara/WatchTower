@@ -10,9 +10,8 @@ Download
 Add the dependencies to your project:
 
 ```groovy
-implementation 'com.snakyapps.watchtower:core:1.0.0'
-debugImplementation 'com.snakyapps.watchtower:interceptor-okhttp:1.0.0'
-releaseImplementation 'com.snakyapps.watchtower:interceptor-okhttp-no-op:1.0.0' // no-op dependency for non-debug build variants
+debugImplementation 'com.snakyapps.watchtower:interceptor-okhttp:1.1.0'
+releaseImplementation 'com.snakyapps.watchtower:interceptor-okhttp-no-op:1.1.0' // no-op dependency for non-debug build variants
 ```
 
 Setup
@@ -54,7 +53,7 @@ Connect the device that is running the app to the same network that you want to 
 After running your application, you can navigate to `http://yourip:8085/` and view the network calls. If you don't know what `yourip` is, It will be printed out to the console with the message of `WatchTower started, listening on ... `  when `Watchtower.start()` is called.
 
 **Observing emulator events in your computers browser**
-If your running watch tower in an emulator you need to forward socket connections from the emulator to your local computer. For example if WatchTower is running on port `8085` you would need to run:
+If your running WatchTower in an emulator you need to forward both server and websocket ports from the emulator to your local computer. For example if WatchTower is running on port `8085` you would need to run:
 ```
 adb forward tcp:8085 tcp:8085
 adb forward tcp:5003 tcp:5003

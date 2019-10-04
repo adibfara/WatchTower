@@ -13,6 +13,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
 import java.util.*
+import kotlin.random.Random
 
 val websocketTowerObserver by lazy {
     WebWatchTowerObserver(
@@ -34,30 +35,30 @@ val retrofit = Retrofit.Builder()
 fun main() {
 
     runBlocking<Unit> {
-
-
-
         javaMainScope.launch(Dispatchers.IO + testJob) {
             withContext(Dispatchers.IO) {
                 while (true) {
-                    try {
-                        val call = if (Random().nextBoolean()) {
+                    launch {
+                        try {
+                            val call = if (true) {
 
-                            retrofit.getExample(
-                                "of course", SampleRequestBody(
-                                    "test id", "TheSNAKY"
-                                )
-                            ).execute()
-                        } else {
-                            retrofit.getAnotherExample().execute()
+                                retrofit.getExample(
+                                    "of course", SampleRequestBody(
+                                        "test id", "TheSNAKY"
+                                    )
+                                ).execute()
+                            } else {
+                                retrofit.getAnotherExample().execute()
+                            }
+                            println(call.body() ?: " Empty response:\n" + call.message())
+
+                        } catch (t: Throwable) {
+                            t.printStackTrace()
+                        } finally {
                         }
-                        println(call.body() ?: " Empty response:\n" + call.message())
-
-                    } catch (t: Throwable) {
-                        t.printStackTrace()
-                    } finally {
-                        delay(3000)
                     }
+                    delay(200)
+
                 }
             }
         }
