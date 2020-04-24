@@ -1,9 +1,8 @@
 package com.snakydesign.watchtower
 
-import com.snakydesign.watchtower.models.RequestData
-import com.snakydesign.watchtower.models.ResponseData
-import com.snakydesign.watchtower.models.TowerObserver
-import java.util.concurrent.ArrayBlockingQueue
+import com.snakydesign.watchtower.models.*
+import com.snakydesign.watchtower.models.FlowWatchtowerObserver
+import kotlinx.coroutines.flow.Flow
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -21,6 +20,9 @@ object WatchTower {
     private var numberOfCachedResponses = 100
     private val latestResponses = CopyOnWriteArrayList<ResponseData>()
     private lateinit var observers: List<TowerObserver>
+
+    private val flowObserver = FlowWatchtowerObserver()
+
     /**
      * returns the last responses received by the WatchTower service
      */
@@ -90,7 +92,7 @@ object WatchTower {
         isActive = true
         if (!isStarted.get()) {
             this.numberOfCachedResponses = numberOfCachedResponses
-            this.observers = observers.toList()
+            this.observers = listOf(flowObserver) + observers.toList()
             isStarted.set(true)
             observers.forEach {
                 it.start()
@@ -99,5 +101,9 @@ object WatchTower {
         } else {
             System.err.println("Watch tower `start` called when it is already started.")
         }
+    }
+
+    fun networkFlow(): Flow<WatchtowerLog> {
+        return flowObserver.flow()
     }
 }

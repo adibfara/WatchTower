@@ -1,1 +1,7 @@
-include ':core', ':JavaApp', ':java', ':interceptor-okhttp', ':interceptor-okhttp-no-op'
+include ':core', ':JavaApp',
+        ':java',
+        ':interceptor-okhttp',
+        ':interceptor-okhttp-no-op',
+        ':myapplication',
+        ':android',
+        ':android-no-op'

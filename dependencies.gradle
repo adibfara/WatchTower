@@ -3,13 +3,13 @@ ext.versions = [
         targetSdk          : 26,
         compileSdk         : 27,
         buildTools         : '28.0.2',
-        coroutines         : '1.0.0',
+        coroutines         : '1.3.5',
 
         kotlin             : '1.3.40',
         androidSdk         : '4.1.1.4',
-        support            : '27.1.0',
+        support            : '28.0.0',
         junit              : '4.12',
-        android            : '3.3.0',
+        android            : '3.4.1',
         mockk              : '1.9.3',
         jfrog              : '4.7.5',
         retrofit           : '2.5.0',
@@ -22,7 +22,7 @@ ext.versions = [
 ]
 ext.maven = [
         groupId: 'com.snakyapps.watchtower',
-        version: '1.1.0'
+        version: '2.0.0-alpha2'
 ]
 ext.gradlePlugins = [
         kotlin                 : "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin",
@@ -38,9 +38,11 @@ ext.libs = [
         androidSdk         : "com.google.android:android:$versions.androidSdk",
         kotlin             : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin",
         appcompatV7        : "com.android.support:appcompat-v7:$versions.support",
+        supportCompat        : "com.android.support:support-compat:$versions.support",
         junit              : "junit:junit:$versions.junit",
         robolectric        : "org.robolectric:robolectric:$versions.robolectric",
         coroutines         : "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versions.coroutines",
+        coroutinesAndroid         : "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutines",
         mockk              : "io.mockk:mockk:$versions.mockk",
         retrofit           : "com.squareup.retrofit2:retrofit:$versions.retrofit",
         retrofitScalars    : "com.squareup.retrofit2:converter-scalars:$versions.retrofit",

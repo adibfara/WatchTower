@@ -151,3 +151,8 @@ data class WatchTowerServerConfig(val serverPort: Int, val webSocketPort: Int) {
         return "{\n  \"serverPort\": $serverPort,\n  \"webSocketPort\": $webSocketPort\n}"
     }
 }
+
+sealed class WatchtowerLog {
+    data class RequestLog(val request: RequestData) : WatchtowerLog()
+    data class ResponseLog(val response: ResponseData) : WatchtowerLog()
+}

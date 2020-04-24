@@ -6,6 +6,7 @@ apply from: rootProject.file('artifactory.gradle')
 
 dependencies {
     implementation libs.kotlin
+    implementation libs.coroutines
 
 }
 

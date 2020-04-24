@@ -32,7 +32,7 @@ if (project.rootProject.file('local.properties').exists()) {
             }
 
 
-            publications = ['mavenJava']
+            publications = ['mavenJava', 'aar']
         }
     }
 
