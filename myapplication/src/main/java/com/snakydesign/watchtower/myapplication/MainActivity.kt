@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity() {
                     val notificationManager = getSystemService(
                         Context.NOTIFICATION_SERVICE
                     ) as NotificationManager
-                    notificationManager.notify(999, it)
+                    notificationManager.notify(999, it.build())
                 }
             }
 

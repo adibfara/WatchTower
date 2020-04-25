@@ -11,7 +11,10 @@ import kotlinx.coroutines.flow.*
 
 
 object WatchTowerAndroid {
-    fun notificationFlow(application: Application, serverPort: Int): Flow<Notification> {
+    fun notificationFlow(
+        application: Application,
+        serverPort: Int
+    ): Flow<NotificationCompat.Builder> {
         return flow {
             val latestRequests = mutableListOf<WatchTowerLog>()
             val notificationCount = 6
@@ -21,7 +24,8 @@ object WatchTowerAndroid {
                     latestRequests.removeAt(0)
                 latestRequests.add(log)
                 flowOf(
-                    application.createNotification(application, serverPort,
+                    application.createNotification(
+                        application, serverPort,
                         latestRequests.joinToString("\n") { it.toNotificationTitle() })
                 )
             }.onStart {
@@ -75,7 +79,7 @@ object WatchTowerAndroid {
         application: android.app.Application,
         serverPort: Int,
         content: String?
-    ): Notification {
+    ): NotificationCompat.Builder {
         val notificationManager = getSystemService(
             Context.NOTIFICATION_SERVICE
         ) as NotificationManager
@@ -83,22 +87,23 @@ object WatchTowerAndroid {
             val channel = NotificationChannel(
                 "WATCHTOWER_CHANNEL",
                 "WatchTower network notifications",
-                NotificationManager.IMPORTANCE_DEFAULT
+                NotificationManager.IMPORTANCE_LOW
             )
             channel.description = "For network logs"
             notificationManager.createNotificationChannel(channel)
         }
-        val mBuilder = NotificationCompat.Builder(this, "WATCHTOWER_CHANNEL")
+        val builder = NotificationCompat.Builder(this, "WATCHTOWER_CHANNEL")
             .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle((application.getApplicationName() ?: "") + " WatchTower")
             .setStyle(NotificationCompat.BigTextStyle())
             .setContentText(content ?: "Listening for requests...")
+            .setOnlyAlertOnce(true)
             .setAutoCancel(false)
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("http://127.0.0.1:$serverPort")).apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
         val pi = PendingIntent.getActivity(this, 0, intent, 0)
-        mBuilder.setContentIntent(pi)
-        return mBuilder.build()
+        builder.setContentIntent(pi)
+        return builder
     }
 }

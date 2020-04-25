@@ -35,6 +35,7 @@ android {
 dependencies {
     implementation libs.kotlin
     implementation libs.coroutines
+    implementation libs.supportCompat
     implementation project(":core")
 }
 
