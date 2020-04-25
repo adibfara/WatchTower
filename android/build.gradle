@@ -49,8 +49,8 @@ publishing {
             version = maven.version
             artifactId "android"
             pom {
-                name =  "Watchtower Android"
-                description = "Watchtower android artifact that displays requests in a notification"
+                name =  "WatchTower Android"
+                description = "WatchTower android artifact that displays requests in a notification"
                 url = POM_URL
             }
         }

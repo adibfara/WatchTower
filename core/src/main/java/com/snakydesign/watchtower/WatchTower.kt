@@ -1,7 +1,7 @@
 package com.snakydesign.watchtower
 
 import com.snakydesign.watchtower.models.*
-import com.snakydesign.watchtower.models.FlowWatchtowerObserver
+import com.snakydesign.watchtower.models.FlowWatchTowerObserver
 import kotlinx.coroutines.flow.Flow
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicBoolean
@@ -21,7 +21,7 @@ object WatchTower {
     private val latestResponses = CopyOnWriteArrayList<ResponseData>()
     private lateinit var observers: List<TowerObserver>
 
-    private val flowObserver = FlowWatchtowerObserver()
+    private val flowObserver = FlowWatchTowerObserver()
 
     /**
      * returns the last responses received by the WatchTower service
@@ -103,7 +103,7 @@ object WatchTower {
         }
     }
 
-    fun networkFlow(): Flow<WatchtowerLog> {
+    fun networkFlow(): Flow<WatchTowerLog> {
         return flowObserver.flow()
     }
 }

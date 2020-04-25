@@ -8,19 +8,19 @@ import kotlinx.coroutines.flow.asFlow
 /**
  * @author Adib Faramarzi (adibfara@gmail.com)
  */
-internal class FlowWatchtowerObserver : TowerObserver() {
+internal class FlowWatchTowerObserver : TowerObserver() {
 
-    private val logChannel = ConflatedBroadcastChannel<WatchtowerLog>()
-    fun flow(): Flow<WatchtowerLog> {
+    private val logChannel = ConflatedBroadcastChannel<WatchTowerLog>()
+    fun flow(): Flow<WatchTowerLog> {
         return logChannel.asFlow()
     }
 
     override fun showRequest(requestSent: RequestData) {
-        logChannel.offer(WatchtowerLog.RequestLog(requestSent))
+        logChannel.offer(WatchTowerLog.RequestLog(requestSent))
     }
 
     override fun showResponse(responseReceived: ResponseData) {
-        logChannel.offer(WatchtowerLog.ResponseLog(responseReceived))
+        logChannel.offer(WatchTowerLog.ResponseLog(responseReceived))
     }
 
     override fun showAllResponses(responseReceived: List<ResponseData>) {
