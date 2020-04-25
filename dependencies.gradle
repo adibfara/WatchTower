@@ -22,7 +22,7 @@ ext.versions = [
 ]
 ext.maven = [
         groupId: 'com.snakyapps.watchtower',
-        version: '2.0.0-rc1'
+        version: '2.0.0'
 ]
 ext.gradlePlugins = [
         kotlin                 : "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin",

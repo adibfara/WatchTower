@@ -90,7 +90,7 @@ object WatchTowerAndroid {
         }
         val mBuilder = NotificationCompat.Builder(this, "WATCHTOWER_CHANNEL")
             .setSmallIcon(R.drawable.ic_notification)
-            .setContentTitle((application.getApplicationName() ?: "") + " Network log")
+            .setContentTitle((application.getApplicationName() ?: "") + " WatchTower")
             .setStyle(NotificationCompat.BigTextStyle())
             .setContentText(content ?: "Listening for requests...")
             .setAutoCancel(false)
