@@ -5,6 +5,7 @@ import com.snakydesign.watchtower.models.ResponseData
 import com.snakydesign.watchtower.models.TowerObserver
 import com.snakydesign.watchtower.models.WatchTowerServerConfig
 import org.java_websocket.WebSocket
+import java.io.InputStream
 import java.net.InetSocketAddress
 import java.nio.charset.Charset
 import java.net.InetAddress
@@ -19,16 +20,16 @@ class WebWatchTowerObserver constructor(private val port: Int, private val webso
 
 
     private val html: String by lazy {
-        val html = (this.javaClass.classLoader.getResourceAsStream("index.html")).readBytes()
+        val html = (getResourceStream("index.html")).readBytes()
             .toString(Charset.defaultCharset())
         return@lazy html
     }
     private val cssFile: String =
-        this.javaClass.classLoader.getResourceAsStream("main.css").readBytes().toString(Charset.defaultCharset())
+        getResourceStream("main.css").readBytes().toString(Charset.defaultCharset())
     private val javascriptFile: String =
-        this.javaClass.classLoader.getResourceAsStream("main.js").readBytes().toString(Charset.defaultCharset())
+        getResourceStream("main.js").readBytes().toString(Charset.defaultCharset())
     private val jqueryFile: String =
-        this.javaClass.classLoader.getResourceAsStream("jquery.min.js").readBytes().toString(Charset.defaultCharset())
+        getResourceStream("jquery.min.js").readBytes().toString(Charset.defaultCharset())
     private lateinit var server: WatchTowerHTTPServer
     private lateinit var websocketServer: WatchTowerWebSocketServer
     private var isStarted = false
@@ -40,6 +41,15 @@ class WebWatchTowerObserver constructor(private val port: Int, private val webso
     init {
 
 
+    }
+
+    private fun getResourceStream(resource: String): InputStream {
+        return try {
+            this.javaClass.classLoader.getResourceAsStream(resource)
+        } catch (exception: java.lang.Exception) {
+            exception.printStackTrace()
+            this.javaClass.classLoader.getResourceAsStream("/$resource")
+        }
     }
 
     @Synchronized

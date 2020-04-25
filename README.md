@@ -10,8 +10,8 @@ Download
 Add the dependencies to your project:
 
 ```groovy
-debugImplementation 'com.snakyapps.watchtower:interceptor-okhttp:1.1.0'
-releaseImplementation 'com.snakyapps.watchtower:interceptor-okhttp-no-op:1.1.0' // no-op dependency for non-debug build variants
+debugImplementation 'com.snakyapps.watchtower:interceptor-okhttp:2.0.0'
+releaseImplementation 'com.snakyapps.watchtower:interceptor-okhttp-no-op:2.0.0' // no-op dependency for non-debug build variants
 ```
 
 Setup
@@ -30,12 +30,31 @@ Setup
         WatchTower.start(WebWatchTowerObserver(port = 8085)) // in Application class
 ```
 
-Note: you should call `watchTower.shutDown()` whenever your application/activity is terminating, which shuts down WatchTower-related services.
-If you're using it on Android, It's best to start and shut down the WatchTower inside an Android service (using `onCreate` and `onDestroy` of an Android Service)
+**(Optional for Android) Add the Android artifact**
+
+![Android Artifact](https://raw.githubusercontent.com/adibfara/Watchtower/master/screenshots/android.png "Android Screenshot")
+
+You can add the following artifact to see the requests right in your notification area. You can `collect` from a `Flow<Notification>` and notify the notification manager.
+
+```groovy
+debugImplementation 'com.snakyapps.watchtower:android:2.0.0'
+releaseImplementation 'com.snakyapps.watchtower:android-no-op:2.0.0' // no-op dependency for non-debug build variants
+```
+
+```kotlin
+   someScope.launch {
+                WatchTowerAndroid.notificationFlow(application, serverPort).collect {
+                    notification ->
+                    (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).notify(999991, notification)
+                }
+            }
+
+```
+
 
 Features
 --------
-![Video](https://raw.githubusercontent.com/adibfara/Watchtower/master/screenshots/video.gif "Watchtower Video")
+![Video](https://raw.githubusercontent.com/adibfara/WatchTower/master/screenshots/video.gif "Watchtower Video")
 
 - Track and observe all API calls made through OKHttp's client
 - GET, POST, PUT, DELETE, PATCH methods

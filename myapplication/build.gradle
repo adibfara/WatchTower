@@ -1,0 +1,52 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-android-extensions'
+}
+
+android {
+    compileSdkVersion 29
+
+    defaultConfig {
+        applicationId "com.snakydesign.watchtower.myapplication"
+        minSdkVersion 16
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation project(":interceptor-okhttp")
+    implementation project(":android-no-op")
+    implementation project(":core")
+    implementation libs.kotlin
+    implementation libs.retrofit
+    implementation libs.retrofitScalars
+    implementation libs.retrofitGson
+    implementation libs.okhttpLog
+    implementation libs.appcompatV7
+    implementation libs.coroutines
+    implementation libs.coroutinesAndroid
+
+    testImplementation libs.junit
+    testImplementation libs.mockk
+}

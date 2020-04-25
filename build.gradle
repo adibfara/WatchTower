@@ -3,10 +3,13 @@
 buildscript {
     apply from: rootProject.file('dependencies.gradle')
     apply from: rootProject.file('artifactory-auth.gradle')
+    ext {
+        kotlin_version = '1.3.72'
+    }
     repositories {
-        google()
         jcenter()
         mavenCentral()
+        google()
     }
     dependencies {
         classpath gradlePlugins.android
@@ -20,14 +23,16 @@ buildscript {
 }
 allprojects {
     repositories {
-        google()
         jcenter()
         mavenCentral()
+        google()
 
         maven { url "https://kotlin.bintray.com/kotlinx" }
     }
 }
-
+task  releaseOnAdibBintray(type: GradleBuild) {
+    tasks = ['assembleRelease', 'generatePomFileForMavenAarPublication', 'copyPom', 'bintrayUpload']
+}
 task clean(type: Delete) {
     delete rootProject.buildDir
 }

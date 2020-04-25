@@ -50,7 +50,6 @@ publishing {
         mavenJava(MavenPublication) {
             from components.java
             artifact sourcesJar
-            artifact javadocJar
             groupId maven.groupId
             version = maven.version
             artifactId "interceptor-okhttp"
