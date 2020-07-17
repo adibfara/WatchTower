@@ -22,13 +22,11 @@ class WatchTowerInterceptorTest {
     lateinit var watchTowerInterceptorTest: TestWatchTowerAPI
     lateinit var mockWebServer: MockWebServer
 
-    lateinit var mockObserver: TowerObserver
     lateinit var interceptor: WatchTowerInterceptor
 
     lateinit var url: HttpUrl
     @Before
     fun setUp() {
-        mockObserver = spyk(TestObserver())
         interceptor = WatchTowerInterceptor()
 
 //        mockkObject(WatchTower)
@@ -49,6 +47,7 @@ class WatchTowerInterceptorTest {
 
     @Test
     fun `test when watch tower is paused, nothing is logged, and when is resumed, resumes its execution`() {
+        val mockObserver = TestWatchTowerObserver()
         WatchTower.start(mockObserver)
         WatchTower.pause()
         val requestContent = "test request"
@@ -59,36 +58,24 @@ class WatchTowerInterceptorTest {
 
         response.execute()
 
-        verify {
-            mockObserver.start()
-            mockObserver.showAllResponses(any())
-
-        }
-        verify(exactly = 0) {
-            mockObserver.logRequest(any())
-        }
-        verify(exactly = 0) {
-            mockObserver.logResponse(any())
-        }
-
+        mockObserver.assertIsStarted()
+        mockObserver.assertShowAllResponsesCalled()
+        assertEquals(0, mockObserver.getRequests().size)
+        assertEquals(0, mockObserver.getResponses().size)
         WatchTower.resume()
 
         mockWebServer.enqueue(MockResponse().setBody(responseContent))
         val response2 = watchTowerInterceptorTest.testPostFunction(requestContent)
 
         response2.execute()
-
-        verify(exactly = 1) {
-            mockObserver.logRequest(any())
-        }
-        verify(exactly = 1) {
-            mockObserver.logResponse(any())
-        }
+        assertEquals(1, mockObserver.getRequests().size)
+        assertEquals(1, mockObserver.getResponses().size)
 
     }
 
     @Test
     fun `test headers in request and response`() {
+        val mockObserver = TestWatchTowerObserver()
         WatchTower.start(mockObserver)
         val requestContent = "test request"
         val responseContent = "hello, world!"
@@ -103,37 +90,34 @@ class WatchTowerInterceptorTest {
         val response = watchTowerInterceptorTest.testPostHeaderFunction(requestHeader, requestContent)
 
         response.execute()
-        verify {
-            mockObserver.logRequest(withArg {
-                assert(it.headers.first { it.key == "testableRequestHeader" }.value == requestHeader)
-            })
-            mockObserver.logResponse(withArg {
-                assert(it.headers.first { it.key == "testableResponseHeader" }.value == responseHeader)
-
-            })
+        mockObserver.getRequests().first().let {
+            assert(it.headers.first { it.key == "testableRequestHeader" }.value == requestHeader)
+        }
+        mockObserver.getResponses().first().let {
+            assert(it.headers.first { it.key == "testableResponseHeader" }.value == responseHeader)
         }
     }
 
     @Test
     fun `test empty request and response`() {
+        val mockObserver = TestWatchTowerObserver()
         WatchTower.start(mockObserver)
         mockWebServer.enqueue(MockResponse())
         val response = watchTowerInterceptorTest.testGetFunction()
 
         response.execute()
-        verify {
-            mockObserver.logRequest(withArg {
-                assert(it.body is EmptyBody)
-            })
-            mockObserver.logResponse(withArg {
-                print(it)
-                assertEquals(0, (it.body as ContentBody).contentLength)
-            })
+        mockObserver.getRequests().first().let {
+            assert(it.body is EmptyBody)
+        }
+        mockObserver.getResponses().first().let {
+            print(it)
+            assertEquals(0, (it.body as ContentBody).contentLength)
         }
     }
 
     @Test
     fun `test content length and body in request and response`() {
+        val mockObserver = TestWatchTowerObserver()
         WatchTower.start(mockObserver)
         val requestContent = "test request"
         val responseContent = "hello, world!"
@@ -143,23 +127,22 @@ class WatchTowerInterceptorTest {
         val response = watchTowerInterceptorTest.testPostFunction(requestContent)
 
         response.execute()
-        verify {
-            mockObserver.logRequest(withArg {
-                assert(it.body is ContentBody)
-                assert((it.body as ContentBody).contentLength == requestContentContentLength)
-                assert((it.body as ContentBody).body == requestContent)
-            })
-            mockObserver.logResponse(withArg {
-                assert(it.body is ContentBody)
-                assert((it.body as ContentBody).contentLength == testContentContentLength)
-                assert((it.body as ContentBody).body == responseContent)
-            })
+        mockObserver.getRequests().first().let {
+            assert(it.body is ContentBody)
+            assert((it.body as ContentBody).contentLength == requestContentContentLength)
+            assert((it.body as ContentBody).body == requestContent)
+        }
+        mockObserver.getResponses().first().let {
+            assert(it.body is ContentBody)
+            assert((it.body as ContentBody).contentLength == testContentContentLength)
+            assert((it.body as ContentBody).body == responseContent)
         }
     }
 
 
     @Test
     fun `test redacted headers in request and response`() {
+        val mockObserver = TestWatchTowerObserver()
         WatchTower.start(mockObserver)
         val requestContent = "test request"
         val responseContent = "hello, world!"
@@ -176,88 +159,67 @@ class WatchTowerInterceptorTest {
         val response = watchTowerInterceptorTest.testPostHeaderFunction(requestHeader, requestContent)
 
         response.execute()
-        verify {
-            mockObserver.logRequest(withArg {
-                assert(!it.headers.any { it.key == "testableRequestHeader" })
-            })
-            mockObserver.logResponse(withArg {
-                assert(!it.headers.any { it.key == "testableResponseHeader" })
+        mockObserver.getRequests().first().let {
+            assert(!it.headers.any { it.key == "testableRequestHeader" })
+        }
+        mockObserver.getResponses().first().let {
+            assert(!it.headers.any { it.key == "testableResponseHeader" })
 
-            })
         }
     }
 
 
     @Test
     fun `test request url`() {
+        val mockObserver = TestWatchTowerObserver()
         WatchTower.start(mockObserver)
         mockWebServer.enqueue(MockResponse())
         val response = watchTowerInterceptorTest.testGetFunction()
 
         response.execute()
-
-        verify {
-            mockObserver.logRequest(withArg {
-                assertEquals(url.toString() + "test", it.url)
-            })
+        mockObserver.getRequests().first().let {
+            assertEquals(url.toString() + "test", it.url)
         }
     }
 
     @Test
     fun `test GET, POST, DELETE, PUT, HEAD types `() {
+        val mockObserver = TestWatchTowerObserver()
         WatchTower.start(mockObserver)
         mockWebServer.enqueue(MockResponse())
         watchTowerInterceptorTest.testGetFunction().execute()
-        verifyOrder {
-            mockObserver.logRequest(withArg {
-                assertEquals("GET", it.method.toUpperCase())
-            })
-
+        mockObserver.getRequests().first().let {
+            assertEquals("GET", it.method.toUpperCase())
         }
 
-        clearMocks(mockObserver)
         mockWebServer.enqueue(MockResponse())
         watchTowerInterceptorTest.testDeleteFunction().execute()
 
 
-
-        verifyOrder {
-
-            mockObserver.logRequest(withArg {
-                assertEquals("DELETE", it.method.toUpperCase())
-            })
+        mockObserver.getRequests()[1].let {
+            assertEquals("DELETE", it.method.toUpperCase())
         }
 
-        clearMocks(mockObserver)
         mockWebServer.enqueue(MockResponse())
         watchTowerInterceptorTest.testHeadFunction().execute()
 
-        verify {
-            mockObserver.logRequest(withArg {
-                assertEquals("HEAD", it.method.toUpperCase())
-            })
+        mockObserver.getRequests()[2].let {
+            assertEquals("HEAD", it.method.toUpperCase())
         }
 
 
-        clearMocks(mockObserver)
         mockWebServer.enqueue(MockResponse())
         watchTowerInterceptorTest.testPostFunction("").execute()
-
-        verify {
-            mockObserver.logRequest(withArg {
-                assertEquals("POST", it.method.toUpperCase())
-            })
+        mockObserver.getRequests()[3].let {
+            assertEquals("POST", it.method.toUpperCase())
         }
 
 
-        clearMocks(mockObserver)
         mockWebServer.enqueue(MockResponse())
         watchTowerInterceptorTest.testPutFunction().execute()
 
-        verify {
-            mockObserver.logRequest(withArg {
-                assertEquals("PUT", it.method.toUpperCase())
-            })
+        mockObserver.getRequests()[4].let {
+            assertEquals("PUT", it.method.toUpperCase())
         }
 
 
