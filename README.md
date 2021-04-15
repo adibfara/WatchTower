@@ -10,8 +10,8 @@ Download
 Add the dependencies to your project:
 
 ```groovy
-debugImplementation 'com.snakyapps.watchtower:interceptor-okhttp:2.0.2'
-releaseImplementation 'com.snakyapps.watchtower:interceptor-okhttp-no-op:2.0.2' // no-op dependency for non-debug build variants
+debugImplementation 'com.snakyapps.watchtower:interceptor-okhttp:2.0.3'
+releaseImplementation 'com.snakyapps.watchtower:interceptor-okhttp-no-op:2.0.3' // no-op dependency for non-debug build variants
 ```
 
 Setup
@@ -37,8 +37,8 @@ Setup
 You can add the following artifact to see the requests right in your notification area. You can `collect` from a `Flow<Notification>` and notify the notification manager.
 
 ```groovy
-debugImplementation 'com.snakyapps.watchtower:android:2.0.2'
-releaseImplementation 'com.snakyapps.watchtower:android-no-op:2.0.2' // no-op dependency for non-debug build variants
+debugImplementation 'com.snakyapps.watchtower:android:2.0.3'
+releaseImplementation 'com.snakyapps.watchtower:android-no-op:2.0.3' // no-op dependency for non-debug build variants
 ```
 
 ```kotlin
