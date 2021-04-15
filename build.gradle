@@ -10,6 +10,8 @@ buildscript {
         jcenter()
         mavenCentral()
         google()
+
+        maven { url "https://jitpack.io" }
     }
     dependencies {
         classpath gradlePlugins.android
@@ -27,6 +29,7 @@ allprojects {
         mavenCentral()
         google()
 
+        maven { url "https://jitpack.io" }
         maven { url "https://kotlin.bintray.com/kotlinx" }
     }
 }
