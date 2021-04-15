@@ -1,7 +1,7 @@
 package com.snakydesign.watchtower.android
 
 import android.app.Application
-import android.support.v4.app.NotificationCompat
+import androidx.core.app.NotificationCompat
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 

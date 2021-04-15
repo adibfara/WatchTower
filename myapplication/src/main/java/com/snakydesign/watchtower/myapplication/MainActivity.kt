@@ -3,7 +3,7 @@ package com.snakydesign.watchtower.myapplication
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.snakydesign.watchtower.WatchTower
 import com.snakydesign.watchtower.android.WatchTowerAndroid
 import com.snakydesign.watchtower.interceptor.WatchTowerInterceptor
